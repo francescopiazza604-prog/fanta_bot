@@ -1,0 +1,380 @@
+{
+  "version": "2026-27",
+  "_note": "Modifica questo file per aggiungere/aggiornare giocatori. Le chiavi devono corrispondere esattamente al campo 'nome' nel CSV quotazioni.",
+  "tactical_overrides": {
+    "_doc": "Ruolo tattico reale vs ruolo Fantacalcio. bonus=moltiplicatore 1.0-1.5 applicato all'output offensivo atteso.",
+    "Dimarco": {
+      "position": "QUINTO_ATT",
+      "bonus": 1.42,
+      "note": "Inter — quinto mancino, gol+assist da ala sinistra"
+    },
+    "Hernandez Theo": {
+      "position": "QUINTO_ATT",
+      "bonus": 1.45,
+      "note": "Milan — terzino mancino con produzione da attaccante"
+    },
+    "Theo Hernandez": {
+      "position": "QUINTO_ATT",
+      "bonus": 1.45,
+      "note": "alias Hernandez Theo"
+    },
+    "Bellanova": {
+      "position": "QUINTO_ATT",
+      "bonus": 1.35,
+      "note": "Inter/Torino — quinto destro, assist machine"
+    },
+    "Cambiaso": {
+      "position": "QUINTO_DUTTILE",
+      "bonus": 1.32,
+      "note": "Juventus — polivalente con assist"
+    },
+    "Dodo": {
+      "position": "QUINTO_ATT",
+      "bonus": 1.3,
+      "note": "Fiorentina — quinto destro dinamico"
+    },
+    "Zappacosta": {
+      "position": "QUINTO_ATT",
+      "bonus": 1.28,
+      "note": "Atalanta — assist da quinto destro"
+    },
+    "Spinazzola": {
+      "position": "QUINTO_ATT",
+      "bonus": 1.25,
+      "note": "Roma — quinto mancino offensivo"
+    },
+    "Lazzari": {
+      "position": "QUINTO_ATT",
+      "bonus": 1.22,
+      "note": "Lazio — quinto destro"
+    },
+    "Parisi": {
+      "position": "QUINTO_ATT",
+      "bonus": 1.22,
+      "note": "Empoli/Fiorentina — quinto mancino"
+    },
+    "Kayode": {
+      "position": "QUINTO_ATT",
+      "bonus": 1.28,
+      "note": "Fiorentina — quinto destro under-22"
+    },
+    "Savona": {
+      "position": "QUINTO_ATT",
+      "bonus": 1.25,
+      "note": "Juventus — quinto destro under-22"
+    },
+    "Calafiori": {
+      "position": "QUINTO_ATT",
+      "bonus": 1.2,
+      "note": "Bologna — difensore che si inserisce"
+    },
+    "De Sciglio": {
+      "position": "QUINTO_DUTTILE",
+      "bonus": 1.15,
+      "note": "Juventus — terzino moderno"
+    },
+    "Gudmundsson": {
+      "position": "TREQUARTISTA",
+      "bonus": 1.38,
+      "note": "Genoa — fantamedia da ALA/trequartista"
+    },
+    "Zaccagni": {
+      "position": "ALA_TREQUARTISTA",
+      "bonus": 1.32,
+      "note": "Lazio — ala sinistra, rigorista"
+    },
+    "Lookman": {
+      "position": "ALA_TREQUARTISTA",
+      "bonus": 1.3,
+      "note": "Atalanta — ala con gol e assist"
+    },
+    "Pulisic": {
+      "position": "ALA",
+      "bonus": 1.28,
+      "note": "Milan — assist machine da esterno"
+    },
+    "Politano": {
+      "position": "ALA",
+      "bonus": 1.22,
+      "note": "Napoli — ala destra tecnica"
+    },
+    "Dybala": {
+      "position": "TREQUARTISTA",
+      "bonus": 1.2,
+      "note": "Roma — trequartista classico"
+    },
+    "Colpani": {
+      "position": "ALA",
+      "bonus": 1.25,
+      "note": "Monza/Fiorentina — ala tecnica"
+    },
+    "Brescianini": {
+      "position": "MEZZALA_ATT",
+      "bonus": 1.28,
+      "note": "Atalanta — mezzala con inserimento"
+    },
+    "Baldanzi": {
+      "position": "TREQUARTISTA",
+      "bonus": 1.3,
+      "note": "Roma — trequartista under-22"
+    },
+    "Soulé": {
+      "position": "ALA",
+      "bonus": 1.32,
+      "note": "Frosinone/Roma — ala argentina under-22"
+    },
+    "Nico Paz": {
+      "position": "TREQUARTISTA",
+      "bonus": 1.4,
+      "note": "Como — talento argentino, trequartista/ala"
+    },
+    "Palestra": {
+      "position": "MEZZALA_ATT",
+      "bonus": 1.38,
+      "note": "Atalanta — mezzala d'inserimento giovanissima"
+    },
+    "Fagioli": {
+      "position": "MEZZALA_ATT",
+      "bonus": 1.2,
+      "note": "Juventus — mezzala tecnica"
+    },
+    "Ndoye": {
+      "position": "ALA",
+      "bonus": 1.28,
+      "note": "Bologna — ala rapida con dribbling"
+    },
+    "Nico Gonzalez": {
+      "position": "ALA",
+      "bonus": 1.22,
+      "note": "Juventus — esterno offensivo"
+    },
+    "Orsolini": {
+      "position": "ALA",
+      "bonus": 1.2,
+      "note": "Bologna — ala destra classica"
+    },
+    "Ikoné": {
+      "position": "ALA",
+      "bonus": 1.18,
+      "note": "Fiorentina — ala tecnica"
+    },
+    "Cancellieri": {
+      "position": "ALA",
+      "bonus": 1.18,
+      "note": "Lazio — ala giovane"
+    },
+    "Samardzic": {
+      "position": "MEZZALA_ATT",
+      "bonus": 1.25,
+      "note": "Udinese — mezzala offensiva"
+    },
+    "Hasa": {
+      "position": "MEZZALA_ATT",
+      "bonus": 1.2,
+      "note": "Lecce — mezzala under-22"
+    },
+    "Casadei": {
+      "position": "MEZZALA_ATT",
+      "bonus": 1.25,
+      "note": "Chelsea/Como — box-to-box under-22"
+    },
+    "Felipe Anderson": {
+      "position": "ALA",
+      "bonus": 1.18,
+      "note": "Lazio — ala tuttofare"
+    }
+  },
+  "youth_players": {
+    "_doc": "Giocatori under-22 (al 2025). birth_year=anno nascita. minutes_trend=1.0 stabile, >1.0 crescente, <1.0 calante.",
+    "Nico Paz": {
+      "birth_year": 2004,
+      "minutes_trend": 1.55,
+      "note": "Como — talento puro, minutaggio in forte crescita"
+    },
+    "Palestra": {
+      "birth_year": 2005,
+      "minutes_trend": 1.5,
+      "note": "Atalanta — mezzala, rivelazione in divenire"
+    },
+    "Camarda": {
+      "birth_year": 2008,
+      "minutes_trend": 1.8,
+      "note": "Milan — attaccante prodigio, minutaggio nascente"
+    },
+    "Kayode": {
+      "birth_year": 2004,
+      "minutes_trend": 1.32,
+      "note": "Fiorentina"
+    },
+    "Baldanzi": {
+      "birth_year": 2003,
+      "minutes_trend": 1.35,
+      "note": "Roma — trequartista in crescita"
+    },
+    "Soulé": {
+      "birth_year": 2003,
+      "minutes_trend": 1.38,
+      "note": "Frosinone/Roma — ala argentina in esplosione"
+    },
+    "Casadei": {
+      "birth_year": 2003,
+      "minutes_trend": 1.4,
+      "note": "Chelsea/Como — box-to-box, futuro top"
+    },
+    "Savona": {
+      "birth_year": 2003,
+      "minutes_trend": 1.3,
+      "note": "Juventus — quinto destro emergente"
+    },
+    "Huijsen": {
+      "birth_year": 2004,
+      "minutes_trend": 1.28,
+      "note": "Roma/Juve — difensore centrale di qualità"
+    },
+    "De Pieri": {
+      "birth_year": 2005,
+      "minutes_trend": 1.45,
+      "note": "Atalanta — ala destra giovanissima"
+    },
+    "Pafundi": {
+      "birth_year": 2006,
+      "minutes_trend": 1.6,
+      "note": "Udinese — talentino italiano, minutaggio in crescita"
+    },
+    "Hasa": {
+      "birth_year": 2003,
+      "minutes_trend": 1.3,
+      "note": "Lecce — mezzala albanese-italiana"
+    },
+    "Fagioli": {
+      "birth_year": 2001,
+      "minutes_trend": 1.22,
+      "note": "Juventus — centrocampista tecnico"
+    },
+    "Miretti": {
+      "birth_year": 2003,
+      "minutes_trend": 1.25,
+      "note": "Juventus — mezzala, minuti discontinui"
+    },
+    "Esposito Sebastiano": {
+      "birth_year": 2002,
+      "minutes_trend": 1.22,
+      "note": "Empoli — attaccante con esperienza"
+    },
+    "Colombo": {
+      "birth_year": 2002,
+      "minutes_trend": 1.2,
+      "note": "Lecce/Empoli — centravanti in crescita"
+    },
+    "Ndoye": {
+      "birth_year": 2000,
+      "minutes_trend": 1.2,
+      "note": "Bologna — ala rapida, già solida"
+    },
+    "Brescianini": {
+      "birth_year": 2000,
+      "minutes_trend": 1.25,
+      "note": "Atalanta — mezzala in esplosione"
+    },
+    "Zeroli": {
+      "birth_year": 2005,
+      "minutes_trend": 1.55,
+      "note": "Milan — centrocampista dalla primavera"
+    },
+    "Cambiaso": {
+      "birth_year": 2000,
+      "minutes_trend": 1.2,
+      "note": "Juventus — terzino polivalente"
+    },
+    "Calafiori": {
+      "birth_year": 2002,
+      "minutes_trend": 1.25,
+      "note": "Bologna/Arsenal — difensore moderno"
+    }
+  },
+  "p90_weights": {
+    "gol_pg": 3.0,
+    "assist_pg": 1.5,
+    "xg_pg": 0.8
+  },
+  "role_priors_p90": {
+    "_doc": "Media e deviazione standard del composite P90 per ruolo (Serie A storica). Usati come prior bayesiano.",
+    "P": {
+      "mean": 0.0,
+      "std": 0.02
+    },
+    "D": {
+      "mean": 0.28,
+      "std": 0.3
+    },
+    "C": {
+      "mean": 0.58,
+      "std": 0.48
+    },
+    "A": {
+      "mean": 1.15,
+      "std": 0.68
+    }
+  },
+  "vip_weights_by_strategy": {
+    "_doc": "Quanto pesa il VIP sul score_selezione per strategia (0=disattivato, 1=massimo).",
+    "conservativa": 0.2,
+    "aggressiva": 0.4,
+    "scommesse": 0.55,
+    "vip_pesante": 0.7,
+    "difesa_forte": 0.3
+  },
+
+  "age_overrides": {
+    "_doc": "Età anagrafica dei giocatori non under-22. Aggiorna ogni estate. Usato per la curva prime_factor (picco a 27 anni, penalità dopo i 31).",
+
+    "Lautaro Martinez": 27,
+    "Vlahovic":         25,
+    "Osimhen":          26,
+    "Lukaku":           31,
+    "Giroud":           38,
+    "Arnautovic":       35,
+    "Immobile":         34,
+    "Morata":           31,
+    "Abraham":          26,
+
+    "Barella":          27,
+    "Calhanoglu":       31,
+    "Tonali":           24,
+    "Verratti":         31,
+    "Locatelli":        26,
+    "Koopmeiners":      26,
+    "De Roon":          32,
+    "Zaccagni":         28,
+    "Lookman":          26,
+    "Pulisic":          26,
+    "Politano":         30,
+    "Dybala":           31,
+
+    "Theo Hernandez":   26,
+    "Hernandez Theo":   26,
+    "Dimarco":          26,
+    "Bastoni":          25,
+    "Di Lorenzo":       30,
+    "Acerbi":           36,
+    "Bremer":           26,
+    "Darmian":          34,
+    "Gatti":            26,
+    "Bellanova":        24,
+    "Cambiaso":         24,
+    "Calafiori":        22,
+
+    "Sommer":           35,
+    "Maignan":          28,
+    "Di Gregorio":      26,
+    "Provedel":         30,
+    "Carnesecchi":      24,
+    "Vicario":          27,
+    "Meret":            27,
+    "Szczesny":         33
+  },
+
+  "forma_recente": {
+    "_doc": "Ultimi N voti fantacalcio del giocatore. Usa /forma <nome> <v1> <v2> [v3] [v4] per aggiornare."
+  }
+}

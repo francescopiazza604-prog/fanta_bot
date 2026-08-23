@@ -1,0 +1,512 @@
+ruolo,nome,costo_iniziale,fanta_media,fvm
+P,Svilar,18,,65
+P,Martinez Jo.,17,,63
+P,Carnesecchi,16,,52
+P,Butez,16,,56
+P,Vicario,16,,55
+P,Maignan,15,,50
+P,De Gea,13,,45
+P,Meret,11,,45
+P,Skorupski,10,,37
+P,Caprile,9,,27
+P,Di Gregorio,9,,10
+P,Mandas,9,,30
+P,Okoye,9,,29
+P,Bijlow,8,,18
+P,Falcone,8,,25
+P,Daffara,7,,5
+P,Muric,7,,15
+P,Perin,6,,5
+P,Stankovic F.,6,,14
+P,Thiam,5,,12
+P,Milinkovic-Savic V.,5,,10
+P,Palmisani,4,,8
+P,Desplanches,2,,8
+P,Provedel,2,,5
+P,Sportiello,1,,1
+P,Happonen,1,,1
+P,Pessina Mas.,1,,1
+P,Sherri,1,,1
+P,Tornqvist,1,,1
+P,Vigorito,1,,1
+P,Christensen O.,1,,1
+P,Lezzerini,1,,1
+P,Lolic,1,,1
+P,Sommariva,1,,1
+P,Stolz,1,,1
+P,Di Gennaro,1,,1
+P,Pinsoglio,1,,1
+P,Motta,1,,1
+P,Renzetti,1,,1
+P,Terracciano,1,,1
+P,Torriani,1,,1
+P,Pizzignacco,1,,1
+P,Strajnar,1,,1
+P,Contini,1,,1
+P,Corvi,1,,1
+P,De Marzi,1,,1
+P,Gollini,1,,1
+P,Russo A.,1,,1
+P,Turati,1,,3
+P,Mascardi,1,,1
+P,Paleari,1,,1
+P,Siviero,1,,1
+P,Padelli,1,,1
+P,Piana,1,,1
+P,Grandi,1,,1
+P,Pozzi,1,,1
+P,Vismara,1,,1
+P,Satalino,1,,1
+P,Penev,1,,1
+P,Pisseri,1,,1
+P,Radunovic,1,,1
+P,Montipò,1,,1
+P,Bleve,1,,1
+D,Dimarco,32,,265
+D,Molina N.,18,,87
+D,Wesley,17,,83
+D,Akanji,16,,55
+D,Bremer,15,,50
+D,Mancini,15,,49
+D,Bastoni,14,,44
+D,Pavlovic,14,,48
+D,Rrahmani,14,,47
+D,Kalulu,13,,46
+D,N'Dicka,13,,44
+D,Solet,13,,46
+D,Stones,12,,38
+D,Gila,12,,31
+D,Di Lorenzo,12,,40
+D,Spence,12,,41
+D,Ostigard,11,,40
+D,Bisseck,11,,33
+D,Scalvini,10,,28
+D,Ramon,10,,32
+D,Dodò,10,,30
+D,Hermoso,10,,26
+D,Vasquez,9,,33
+D,Cambiaso,9,,27
+D,Chalobah T.,9,,26
+D,Hien,8,,16
+D,Zappacosta,8,,24
+D,Lucumì,8,,18
+D,Miranda J.,8,,24
+D,Mina,8,,20
+D,Dragusin,8,,27
+D,Jimenez A.,8,,23
+D,Norton-Cuffy,8,,22
+D,Celik,8,,13
+D,Bartesaghi,8,,25
+D,Spinazzola,8,,24
+D,Delprato,8,,21
+D,Valeri,8,,24
+D,Koulierakis,8,,20
+D,Vojvoda,8,,19
+D,Couto,8,,27
+D,Obert,7,,14
+D,Kaiki,7,,23
+D,Carlos Augusto,7,,27
+D,Doekhi,7,,22
+D,Romagnoli,7,,24
+D,Tiago Gabriel,7,,17
+D,Gabbia,7,,25
+D,Tomori,7,,11
+D,Buongiorno,7,,15
+D,Idzes,7,,19
+D,Coco,7,,18
+D,Ismajli,7,,18
+D,Kristensen T.,7,,20
+D,Ahanor,6,,16
+D,Bellanova,6,,15
+D,Bernasconi,6,,17
+D,Heggem,6,,15
+D,Zortea,6,,19
+D,Valle,6,,18
+D,Valdepenas,6,,18
+D,Viery,6,,19
+D,Monterisi,6,,14
+D,Marcandalli,6,,13
+D,Pavard,6,,18
+D,Tavares N.,6,,17
+D,Marusic,6,,20
+D,Gallo,6,,13
+D,Mangas,6,,15
+D,Beukema,6,,13
+D,Comuzzo,6,,11
+D,Kamara H.,6,,12
+D,Bella-Kotchap,6,,13
+D,Obrador,6,,15
+D,Kolasinac,5,,12
+D,Vitik,5,,11
+D,Holm,5,,13
+D,Kofler,5,,11
+D,Zè Pedro,5,,11
+D,Kempf,5,,13
+D,Parisi,5,,12
+D,Bracaglia,5,,11
+D,Oyono A.,5,,12
+D,Martin,5,,15
+D,Kelly L.,5,,10
+D,Pedraza,5,,15
+D,Gaspar K.,5,,12
+D,Veiga D.,5,,11
+D,Olivera,5,,13
+D,Rensch,5,,16
+D,Pedersen,5,,13
+D,Moreno M.,5,,11
+D,Haps,5,,11
+D,Fortini,5,,13
+D,Zappa,4,,9
+D,Smolcic I.,4,,10
+D,Pongracic,4,,8
+D,Calvani,4,,10
+D,Mitaj,4,,9
+D,Gatti,4,,10
+D,Siebert,4,,12
+D,Delli Carri,4,,11
+D,Lucchesi,4,,12
+D,Birindelli,4,,12
+D,Valenti,4,,10
+D,Ghilardi,4,,10
+D,Walukiewicz,4,,10
+D,Doig,4,,10
+D,Comert,4,,10
+D,Kabasele,4,,9
+D,Bertola,4,,10
+D,Zanoli,4,,10
+D,Arizala,4,,8
+D,Halhal,4,,10
+D,Correia T.,4,,12
+D,Terzic,4,,11
+D,Favasuli,4,,11
+D,Kossounou,3,,7
+D,Casale,3,,6
+D,Rodriguez Ju.,3,,10
+D,Idrissi R.,3,,7
+D,Ranieri L.,3,,7
+D,Joao Mario,3,,7
+D,Akpoguma,3,,7
+D,Cittadini,3,,8
+D,Provstgaard,3,,10
+D,Floriani Mussolini,3,,12
+D,De Winter,3,,12
+D,Estupinan,3,,9
+D,Kouadio,3,,9
+D,Carboni A.,3,,9
+D,Troilo,3,,8
+D,Britschgi,3,,10
+D,Candè,3,,12
+D,Schingtienne,3,,7
+D,Sverko,3,,7
+D,Hainaut,3,,7
+D,Helland,2,,5
+D,Alhassane,2,,6
+D,Van Der Brempt,2,,5
+D,Otoa,2,,5
+D,Puczka,2,,7
+D,Sabelli,2,,5
+D,Lazzari,2,,8
+D,Pellegrini Lu.,2,,5
+D,Jean,2,,4
+D,Diawara S.,2,,4
+D,Marin R.,2,,6
+D,Biraghi,2,,5
+D,Palma,2,,5
+D,Ebosse,2,,4
+D,Franjic,2,,4
+D,Sagrado,2,,4
+D,Aurelio,2,,5
+D,De Silvestri,1,,4
+D,Goldaniga,1,,1
+D,Amey,1,,1
+D,Oyono J.,1,,3
+D,Corrado,1,,3
+D,Matturro,1,,2
+D,Rugani,1,,3
+D,Cabal,1,,4
+D,Patric,1,,4
+D,Ndaba,1,,4
+D,Antov,1,,2
+D,Bakoune,1,,4
+D,Marianucci,1,,3
+D,Mazzocchi,1,,3
+D,Ndiaye,1,,4
+D,Carboni F.,1,,3
+D,Ziolkowski,1,,2
+D,Missori,1,,2
+D,Pieragnolo,1,,1
+D,Mlacic,1,,3
+D,Abankwah,1,,3
+D,Gomes,1,,1
+D,Odenthal,1,,1
+D,Omar Fayed,1,,1
+C,Paz N.,30,,250
+C,McTominay,28,,240
+C,Calhanoglu,27,,230
+C,Orsolini,26,,200
+C,Pulisic,25,,180
+C,Rabiot,22,,128
+C,Baturina,19,,102
+C,Mora,19,,101
+C,Da Cunha,18,,90
+C,Zaniolo,18,,100
+C,Atta,17,,87
+C,Barella,17,,80
+C,McKennie,17,,68
+C,Zaccagni,16,,91
+C,De Bruyne,15,,98
+C,Vlasic,14,,80
+C,Gudmundsson A.,13,,61
+C,Taylor K.,13,,64
+C,Ederson D.S.,12,,45
+C,Samardzic,12,,42
+C,Rodriguez Je.,12,,32
+C,Alajbegovic,12,,56
+C,Conceicao,12,,60
+C,Modric,12,,50
+C,Mastantuono,12,,58
+C,Moreira,12,,52
+C,Rowe,11,,37
+C,Baldanzi,11,,30
+C,Zambo Anguissa,11,,54
+C,Perrone,10,,38
+C,Zielinski,10,,41
+C,Thuram K.,10,,41
+C,Saelemaekers,10,,43
+C,Politano,10,,47
+C,Konè M.,10,,42
+C,Thorstvedt,10,,41
+C,Casadei,10,,37
+C,Ekkelenkamp,10,,41
+C,Pellegrini Lo.,10,,28
+C,Pasalic,9,,32
+C,Bernardeschi,9,,21
+C,Mandragora,9,,28
+C,Cancellieri,9,,28
+C,Isaksen,9,,25
+C,Konè I.,9,,20
+C,Odgaard,8,,22
+C,Cambiaghi,8,,25
+C,Fagioli,8,,23
+C,Ndour,8,,25
+C,Diouf,8,,37
+C,Sucic P.,8,,26
+C,Locatelli,8,,32
+C,Colpani,8,,25
+C,Vergara,8,,34
+C,Cristante,8,,29
+C,Schmid,8,,30
+C,Gaetano,7,,24
+C,Ferguson,7,,18
+C,Fazzini,7,,19
+C,Calò,7,,25
+C,Frendrup,7,,19
+C,Frattesi,7,,55
+C,Pessina,7,,15
+C,Lobotka,7,,20
+C,Bernabè,7,,36
+C,Volpato,7,,23
+C,Oristanio,7,,27
+C,Unai Gomez,7,,23
+C,Sow,7,,14
+C,Zalewski,6,,21
+C,Pobega,6,,14
+C,Adopo,6,,13
+C,Winks,6,,14
+C,Caqueret,6,,20
+C,Liberali,6,,22
+C,Oulai,6,,20
+C,Ellertsson,6,,18
+C,Zhegrova,6,,18
+C,Rovella,6,,16
+C,Coulibaly L.,6,,14
+C,Pierotti,6,,19
+C,Chukwueze,6,,11
+C,Akinsanmiro,6,,16
+C,Nicolussi Caviglia,6,,18
+C,Karlstrom,6,,20
+C,Basic,6,,19
+C,Tourè I.,6,,15
+C,Amondarain,5,,12
+C,Romano,5,,12
+C,Felici,5,,10
+C,Milla,5,,14
+C,Addai,5,,10
+C,Zerbin,5,,13
+C,Meichtry,5,,14
+C,Traorè Hj.,5,,11
+C,Mkhitaryan,5,,19
+C,Koopmeiners,5,,14
+C,Dele-Bashiru,5,,13
+C,Berisha M.,5,,16
+C,Gandelman,5,,14
+C,Fofana Y.,5,,23
+C,Keita M.,5,,15
+C,Pisilli,5,,17
+C,Matic,5,,15
+C,Adzic,5,,16
+C,Bakola,5,,14
+C,Cacciamani,5,,18
+C,Gineitis,5,,13
+C,Piotrowski,5,,15
+C,Busio,5,,14
+C,Sohm,5,,14
+C,Perez K.,5,,14
+C,Grillitsch,5,,14
+C,De Roon,4,,12
+C,Moro N.,4,,10
+C,Prati,4,,7
+C,Fabbian,4,,8
+C,Cichella,4,,11
+C,Koutsoupias,4,,12
+C,Amorim,4,,11
+C,Luis Henrique,4,,13
+C,Douglas Luiz,4,,12
+C,Cataldi,4,,12
+C,Ngom,4,,11
+C,Ricci S.,4,,11
+C,Jashari,4,,11
+C,Loftus-Cheek,4,,11
+C,Folorunsho,4,,10
+C,Almqvist,4,,14
+C,El Aynaoui,4,,18
+C,Fitz-Jim,4,,13
+C,Ilkhan,4,,10
+C,Njie,4,,12
+C,Sulemana I.,3,,7
+C,Dominguez B.,3,,12
+C,Deiola,3,,8
+C,Brescianini,3,,7
+C,Gelli F.,3,,8
+C,Fini ,3,,9
+C,Messias,3,,8
+C,Stankovic A.,3,,10
+C,Miretti,3,,11
+C,Colombo L.,3,,7
+C,Gilmour,3,,9
+C,Sorensen O.,3,,12
+C,Diallo O.,3,,12
+C,Aboukhlal,3,,5
+C,Miller L.,3,,12
+C,Helgason,3,,7
+C,Cissè A.,3,,8
+C,El Azzouzi O.,2,,4
+C,Fadera,2,,3
+C,Hasa,2,,5
+C,Masini,2,,4
+C,Venturino,2,,6
+C,Maleh,2,,5
+C,Musah,2,,6
+C,Ciurria,2,,6
+C,Ordonez C.,2,,5
+C,Boloca,2,,5
+C,Lipani,2,,5
+C,Chakvetadze,2,,6
+C,Duncan,2,,4
+C,Liteta,1,,1
+C,Lahdo,1,,1
+C,El Azzouzi A.,1,,3
+C,Kone B.,1,,3
+C,Belahyane,1,,5
+C,Przyborek,1,,5
+C,Gorter,1,,3
+C,Kaba,1,,2
+C,Fofana Sa.,1,,1
+C,Cremaschi,1,,3
+C,Iannoni,1,,1
+C,Ilic,1,,4
+C,Anjorin,1,,4
+C,Camara A.,1,,3
+C,Zarraga,1,,4
+C,Dagasso,1,,1
+C,Forson O.,1,,1
+C,Laerke,1,,1
+C,Comotto,1,,1
+A,Martinez L.,35,,370
+A,Malen,34,,365
+A,Thuram,29,,280
+A,Hojlund,28,,271
+A,Ramos G.,27,,232
+A,Kolo Muani,26,,225
+A,Kean,25,,200
+A,Yildiz,23,,192
+A,Douvikas,20,,157
+A,Scamacca,19,,131
+A,Davis K.,19,,122
+A,Krstovic,18,,95
+A,Leao,18,,120
+A,Berardi,18,,115
+A,De Ketelaere,17,,106
+A,Dovbyk,16,,73
+A,Esposito F.P.,16,,93
+A,Pellegrino M.,15,,60
+A,Laurientè,15,,88
+A,Simeone,15,,82
+A,Santos A.,14,,57
+A,Dybala,14,,67
+A,Castro S.,14,,81
+A,Raspadori,13,,62
+A,Esposito Se.,13,,40
+A,Nkunku,13,,25
+A,Pinamonti,13,,55
+A,Kevin Carlos,13,,47
+A,Soulè,12,,53
+A,Adams A.,12,,51
+A,Diao,11,,50
+A,Colombo,11,,63
+A,Tourè E.,11,,43
+A,Dia,10,,31
+A,Ratkov,10,,32
+A,Bowie,10,,39
+A,Romero D.,10,,38
+A,Ghedjemis,9,,30
+A,David,9,,40
+A,Geubbels,9,,25
+A,Cutrone,9,,33
+A,Adams C.,9,,32
+A,Piccoli,8,,31
+A,Vitinha O.,8,,20
+A,Yeboah J.,8,,28
+A,Rrahmani Al.,8,,20
+A,Raimondo,7,,24
+A,Bonny,7,,21
+A,Stulic,7,,18
+A,Zapata D.,7,,18
+A,Sulemana K.,6,,16
+A,Mutandwa,6,,15
+A,Boga,6,,25
+A,Noslin,6,,17
+A,Gimenez,6,,14
+A,Neres,6,,22
+A,Maldini,5,,22
+A,Camarda,5,,20
+A,Mota,5,,18
+A,Frigan,5,,13
+A,Adorante,5,,14
+A,Milik,5,,13
+A,Borrelli,4,,9
+A,Mendy P.,4,,9
+A,Morata,4,,10
+A,Kvernadze,4,,15
+A,Havel,4,,9
+A,Giovane,4,,10
+A,Kulenovic,4,,9
+A,Gueye,4,,7
+A,Robinson J.,4,,10
+A,Kuhn,3,,5
+A,Ekhator,3,,10
+A,N'Dri,3,,9
+A,Varela G.,3,,7
+A,Lang,3,,10
+A,Lucca,3,,10
+A,Elphege,3,,11
+A,Buksa,2,,4
+A,Albarracin,1,,1
+A,Trepy,1,,2
+A,Azon,1,,1
+A,Vaz,1,,4
+A,Bayo V.,1,,3
+A,Lisman,1,,1
+A,Lauberbach,1,,1
+A,Lontani,1,,3
+A,De Martis,1,,1

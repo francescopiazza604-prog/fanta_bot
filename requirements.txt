@@ -1,0 +1,13 @@
+pandas
+numpy
+scikit-learn
+joblib
+pulp
+requests
+beautifulsoup4
+lxml
+streamlit
+python-telegram-bot>=20.0
+python-dotenv
+rapidfuzz
+cloudscraper

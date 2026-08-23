@@ -1,0 +1,446 @@
+nome_tm,da_squadra,a_squadra,tipo,cambio_squadra,upgrade_squadra,tipo_prestito,coach_bonus,coach_style
+Djed Spence,Inter,Tottenham,definitivo,1,-1,0,0.0,equilibrato
+Curtis Jones,Inter,Liverpool,definitivo,1,-1,0,0.0,equilibrato
+Aleksandar Stanković,Inter,Club Bruges,definitivo,1,-1,0,0.0,equilibrato
+Manuel Akanji,Inter,Man City,definitivo,1,-1,0,0.0,equilibrato
+Ivan Provedel,Inter,Lazio,definitivo,1,0,0,0.05,contropiede
+John Stones,Inter,Man City,definitivo,1,-1,0,0.0,equilibrato
+Denzel Dumfries,Inter,Real Madrid,definitivo,1,-1,0,0.0,equilibrato
+Davide Frattesi,Inter,Lazio,prestito,1,0,1,0.05,contropiede
+Sebastiano Esposito,Inter,Cagliari,definitivo,1,-1,0,0.0,contropiede
+Franco Carboni,Inter,Parma,definitivo,1,-1,0,0.05,equilibrato
+Stefan de Vrij,Inter,Panathinaikos,definitivo,1,-1,0,0.0,equilibrato
+Yann Sommer,Inter,Club Bruges,definitivo,1,-1,0,0.0,equilibrato
+Ebenezer Akinsanmiro,Inter,Monza,prestito,1,-1,1,0.05,equilibrato
+Matteo Darmian,Inter,svincolato,definitivo,1,-1,0,0.0,equilibrato
+Francesco Acerbi,Inter,svincolato,definitivo,1,-1,0,0.0,equilibrato
+Rasmus Højlund,SSC Napoli,Manchester Utd.,definitivo,1,-1,0,0.0,equilibrato
+Alisson Santos,SSC Napoli,Sporting,definitivo,1,-1,0,0.0,equilibrato
+Vanja Milinković-Savić,SSC Napoli,Torino,definitivo,1,-1,0,0.05,equilibrato
+Benoît Badiashile,SSC Napoli,Chelsea,prestito,1,-1,1,0.0,equilibrato
+Costantino Favasuli,SSC Napoli,Catanzaro,prestito,1,-1,1,0.0,equilibrato
+Mattia Esposito,SSC Napoli,Sorrento,definitivo,1,-1,0,0.0,equilibrato
+Christian Garofalo,SSC Napoli,Napoli U19,definitivo,1,0,0,0.2,possesso
+Miguel Gutiérrez,SSC Napoli,Leverkusen,definitivo,1,-1,0,0.0,equilibrato
+Giovanni Simeone,SSC Napoli,Torino,definitivo,1,-1,0,0.05,equilibrato
+Romelu Lukaku,SSC Napoli,Fenerbahce,definitivo,1,-1,0,0.0,equilibrato
+Alessandro Zanoli,SSC Napoli,Udinese,definitivo,1,-1,0,0.0,contropiede
+Luis Hasa,SSC Napoli,Frosinone,definitivo,1,-1,0,0.05,pressing
+Alessio Zerbin,SSC Napoli,Frosinone,definitivo,1,-1,0,0.05,pressing
+Emanuele Rao,SSC Napoli,Pisa,prestito,1,-1,1,0.0,equilibrato
+Coli Saco,SSC Napoli,Riga,definitivo,1,-1,0,0.0,equilibrato
+Gennaro Iaccarino,SSC Napoli,Arezzo,definitivo,1,-1,0,0.0,equilibrato
+Antonio Cioffi,SSC Napoli,Latina,definitivo,1,-1,0,0.0,equilibrato
+Mathias Ferrante,SSC Napoli,Ospitaletto,prestito,1,-1,1,0.0,equilibrato
+Claudio Turi,SSC Napoli,Pineto,prestito,1,-1,1,0.0,equilibrato
+Lorenzo Sgarbi,SSC Napoli,Sambenedettese,prestito,1,-1,1,0.0,equilibrato
+Juan Jesus,SSC Napoli,svincolato,definitivo,1,-1,0,0.0,equilibrato
+Eljif Elmas,SSC Napoli,Lipsia,prestito,1,-1,1,0.0,equilibrato
+Santiago Castro,AS Roma,Bologna,definitivo,1,-1,0,0.1,pressing
+Rodrigo Mora,AS Roma,FC Porto,definitivo,1,-1,0,0.0,equilibrato
+Donyell Malen,AS Roma,Aston Villa,definitivo,1,-1,0,0.0,equilibrato
+Konstantinos Koulierakis,AS Roma,Wolfsburg,definitivo,1,-1,0,0.0,equilibrato
+Nahuel Molina,AS Roma,Atlético,definitivo,1,-1,0,0.0,equilibrato
+Daniele Ghilardi,AS Roma,Verona,definitivo,1,-1,0,0.05,pressing
+Giorgio De Marzi,AS Roma,Roma U20,definitivo,1,0,0,0.1,equilibrato
+Buba Sangaré,AS Roma,Elche,definitivo,1,-1,0,0.0,equilibrato
+Saud Abdulhamid,AS Roma,Lens,definitivo,1,-1,0,0.0,equilibrato
+Artem Dovbyk,AS Roma,Bologna,prestito,1,-1,1,0.1,pressing
+Eldor Shomurodov,AS Roma,Basaksehir,definitivo,1,-1,0,0.0,equilibrato
+Alessandro Romano,AS Roma,Cagliari,prestito,1,-1,1,0.0,contropiede
+Zeki Çelik,AS Roma,Juventus,definitivo,1,0,0,0.05,equilibrato
+Angeliño,AS Roma,Dep. A Coruña,prestito,1,-1,1,0.0,equilibrato
+Marash Kumbulla,AS Roma,Rayo Vallecano,prestito,1,-1,1,0.0,equilibrato
+Riccardo Pagano,AS Roma,Cesena,definitivo,1,-1,0,0.0,equilibrato
+Radoslaw Zelezny,AS Roma,Perugia,prestito,1,-1,1,0.0,equilibrato
+Luigi Cherubini,AS Roma,Benevento,prestito,1,-1,1,0.0,equilibrato
+Filippo Reale,AS Roma,Carrarese,prestito,1,-1,1,0.0,equilibrato
+Stephan El Shaarawy,AS Roma,svincolato,definitivo,1,-1,0,0.0,equilibrato
+Bryan Zaragoza,AS Roma,Bayern,prestito,1,-1,1,0.0,equilibrato
+Lorenzo Venturino,AS Roma,Genoa,prestito,1,-1,1,0.0,equilibrato
+Konstantinos Tsimikas,AS Roma,Liverpool,prestito,1,-1,1,0.0,equilibrato
+Evan Ferguson,AS Roma,Brighton,prestito,1,-1,1,0.0,equilibrato
+Trevoh Chalobah,Como 1907,Chelsea,definitivo,1,1,0,0.0,equilibrato
+Álvaro Morata,Como 1907,Milan,definitivo,1,1,0,0.15,pressing
+Luis Milla,Como 1907,Getafe CF,definitivo,1,1,0,0.0,equilibrato
+Mattia Liberali,Como 1907,Catanzaro,definitivo,1,1,0,0.0,equilibrato
+Yan Couto,Como 1907,Dortmund,prestito,1,1,1,0.0,equilibrato
+Andrés Cuenca,Como 1907,Barça Atlètic,definitivo,1,1,0,0.0,equilibrato
+Kaiki,Como 1907,Cruzeiro,prestito,1,1,1,0.0,equilibrato
+Andréa Le Borgne,Como 1907,Como U20,definitivo,1,0,0,0.1,possesso
+Yannik Engelhardt,Como 1907,Friburgo,definitivo,1,1,0,0.0,equilibrato
+Patrick Cutrone,Como 1907,Monza,definitivo,1,0,0,0.05,equilibrato
+Stefan Posch,Como 1907,Magonza,definitivo,1,1,0,0.0,equilibrato
+Mërgim Vojvoda,Como 1907,Udinese,definitivo,1,1,0,0.0,contropiede
+Tommaso Cassandro,Como 1907,Palermo,definitivo,1,1,0,0.0,equilibrato
+Ben Lhassine Kone,Como 1907,Frosinone,definitivo,1,0,0,0.05,pressing
+Ali Jasim,Como 1907,Zakho SC,definitivo,1,1,0,0.0,equilibrato
+Sergi Roberto,Como 1907,LA Galaxy,definitivo,1,1,0,0.0,equilibrato
+Giuseppe Mazzaglia,Como 1907,Caratese,definitivo,1,1,0,0.0,equilibrato
+Fellipe Jack,Como 1907,Cremonese,prestito,1,0,1,0.0,equilibrato
+Fabio Rispoli,Como 1907,Südtirol,prestito,1,1,1,0.0,equilibrato
+Alieu Fadera,Como 1907,Cagliari,prestito,1,0,1,0.0,contropiede
+Jacopo Simonetta,Como 1907,Vado,prestito,1,1,1,0.0,equilibrato
+Federico Chinetti,Como 1907,Mantova,prestito,1,1,1,0.0,equilibrato
+Alberto Moreno,Como 1907,svincolato,definitivo,1,1,0,0.0,equilibrato
+Diego Carlos,Como 1907,Fenerbahce,prestito,1,1,1,0.0,equilibrato
+Nikola Cavlina,Como 1907,Dinamo Zagabria,prestito,1,1,1,0.0,equilibrato
+Henrique Menke,Como 1907,Inter U20,prestito,1,1,1,0.1,pressing
+Gonçalo Ramos,AC Milan,PSG,definitivo,1,-1,0,0.0,equilibrato
+Diego Moreira,AC Milan,Strasburgo,definitivo,1,-1,0,0.0,equilibrato
+Mario Gila,AC Milan,Lazio,definitivo,1,0,0,0.05,contropiede
+Andrej Kostić,AC Milan,Partizan,definitivo,1,-1,0,0.0,equilibrato
+Sankhoun Diawara,AC Milan,Troyes,definitivo,1,-1,0,0.0,equilibrato
+Álex Jiménez,AC Milan,Bournemouth,definitivo,1,-1,0,0.0,equilibrato
+Tommaso Pobega,AC Milan,Bologna,definitivo,1,-1,0,0.1,pressing
+Lorenzo Colombo,AC Milan,Genoa,definitivo,1,-1,0,0.0,equilibrato
+Zachary Athekame,AC Milan,Olymp. Lione,prestito,1,-1,1,0.0,equilibrato
+David Odogu,AC Milan,Tolosa,prestito,1,-1,1,0.0,equilibrato
+Ismaël Bennacer,AC Milan,svincolato,definitivo,1,-1,0,0.0,equilibrato
+Niclas Füllkrug,AC Milan,West Ham Utd.,prestito,1,-1,1,0.0,equilibrato
+Loïs Openda,Juventus FC,Lipsia,definitivo,1,-1,0,0.0,equilibrato
+Randal Kolo Muani,Juventus FC,PSG,definitivo,1,-1,0,0.0,equilibrato
+Kerim Alajbegovic,Juventus FC,Leverkusen,definitivo,1,-1,0,0.0,equilibrato
+Jhon Lucumí,Juventus FC,Bologna,definitivo,1,-1,0,0.1,pressing
+Jeff Ekhator,Juventus FC,Genoa,definitivo,1,-1,0,0.0,equilibrato
+Jérémie Boga,Juventus FC,Nizza,definitivo,1,-1,0,0.0,equilibrato
+Guglielmo Vicario,Juventus FC,Tottenham,prestito,1,-1,1,0.0,equilibrato
+Timothy Weah,Juventus FC,Marsiglia,definitivo,1,-1,0,0.0,equilibrato
+Facundo González,Juventus FC,Racing,definitivo,1,-1,0,0.0,equilibrato
+João Mário,Juventus FC,Fiorentina,prestito,1,-1,1,0.15,possesso
+Vasilije Adžić,Juventus FC,Sassuolo,prestito,1,-1,1,0.0,equilibrato
+Dušan Vlahović,Juventus FC,Besiktas,definitivo,1,-1,0,0.0,equilibrato
+Filip Kostic,Juventus FC,PSV,definitivo,1,-1,0,0.0,equilibrato
+Arthur Melo,Juventus FC,svincolato,definitivo,1,-1,0,0.0,equilibrato
+Emil Holm,Juventus FC,Bologna,prestito,1,-1,1,0.1,pressing
+Gianluca Gaetano,Atalanta,Cagliari,definitivo,1,-1,0,0.0,contropiede
+Thomas Kristensen,Atalanta,Udinese,prestito,1,0,1,0.0,contropiede
+Paolo Vismara,Atalanta,Atalanta U23,definitivo,1,0,0,0.15,pressing
+Marco Palestra,Atalanta,Chelsea,definitivo,1,0,0,0.0,equilibrato
+Marco Brescianini,Atalanta,Fiorentina,definitivo,1,0,0,0.15,possesso
+Berat Djimsiti,Atalanta,Al-Diriyah,definitivo,1,0,0,0.0,equilibrato
+El Bilal Touré,Atalanta,Parma,prestito,1,-1,1,0.05,equilibrato
+Daniel Maldini,Atalanta,Cagliari,prestito,1,-1,1,0.0,contropiede
+Ben Godfrey,Atalanta,Glasgow Rangers,prestito,1,0,1,0.0,equilibrato
+Giovanni Bonfanti,Atalanta,Las Palmas,prestito,1,0,1,0.0,equilibrato
+Vanja Vlahović,Atalanta,Mantova,prestito,1,0,1,0.0,equilibrato
+Francesco Rossi,Atalanta,Atalanta,definitivo,1,0,0,0.15,pressing
+Yunus Musah,Atalanta,Milan,prestito,1,1,1,0.15,pressing
+Mikel Amondarain,Bologna FC,Estudiantes LP,definitivo,1,0,0,0.0,equilibrato
+Rahim Alhassane,Bologna FC,Real Oviedo,definitivo,1,0,0,0.0,equilibrato
+Luigi Caccavo,Bologna FC,Lumezzane,definitivo,1,0,0,0.0,equilibrato
+Roberto Piccoli,Bologna FC,Fiorentina,prestito,1,0,1,0.15,possesso
+Ukko Happonen,Bologna FC,Bologna U20,definitivo,1,0,0,0.1,pressing
+Dimitar Papazov,Bologna FC,Bologna U20,definitivo,1,0,0,0.1,pressing
+Giovanni Fabbian,Bologna FC,Fiorentina,definitivo,1,0,0,0.15,possesso
+Federico Ravaglia,Bologna FC,Watford,definitivo,1,0,0,0.0,equilibrato
+Michel Aebischer,Bologna FC,Pisa,definitivo,1,0,0,0.0,equilibrato
+Thijs Dallinga,Bologna FC,Colonia,prestito,1,0,1,0.0,equilibrato
+Charalabos Lykogiannis,Bologna FC,AEK Atene,definitivo,1,0,0,0.0,equilibrato
+Giuseppe Battimelli,Bologna FC,Lecco,definitivo,1,0,0,0.0,equilibrato
+Remo Freuler,Bologna FC,Olympiacos,definitivo,1,0,0,0.0,equilibrato
+Mattia Motolese,Bologna FC,Virtus Entella,definitivo,1,0,0,0.0,equilibrato
+Manuel Rosetti,Bologna FC,Forlì,definitivo,1,0,0,0.0,equilibrato
+Benja Domínguez,Bologna FC,Sassuolo,prestito,1,0,1,0.0,equilibrato
+Mihajlo Ilić,Bologna FC,Cesena,prestito,1,0,1,0.0,equilibrato
+Lorenzo Menegazzo,Bologna FC,Lumezzane,prestito,1,0,1,0.0,equilibrato
+Niklas Pyyhtiä,Bologna FC,Südtirol,prestito,1,0,1,0.0,equilibrato
+Riccardo Stivanello,Bologna FC,Südtirol,prestito,1,0,1,0.0,equilibrato
+Tommaso Ebone,Bologna FC,Lumezzane,prestito,1,0,1,0.0,equilibrato
+Wisdom Amey,Bologna FC,Frosinone,prestito,1,-1,1,0.05,pressing
+Tommaso Corazza,Bologna FC,Vicenza,prestito,1,0,1,0.0,equilibrato
+Orji Okwonkwo,Bologna FC,svincolato,definitivo,1,0,0,0.0,equilibrato
+Kevin Bonifazi,Bologna FC,svincolato,definitivo,1,0,0,0.0,equilibrato
+Simon Sohm,Bologna FC,Fiorentina,prestito,1,0,1,0.15,possesso
+Boulaye Dia,SS Lazio,Salernitana,definitivo,1,-1,0,0.0,contropiede
+Josip Sutalo,SS Lazio,Ajax,prestito,1,-1,1,0.0,equilibrato
+Alfonso Pedraza,SS Lazio,Villarreal,definitivo,1,-1,0,0.0,equilibrato
+Danilho Doekhi,SS Lazio,Union Berlino,definitivo,1,-1,0,0.0,equilibrato
+Bruno Galassi,SS Lazio,Real Madrid C,definitivo,1,-1,0,0.0,equilibrato
+Federico Serra,SS Lazio,Lazio U20,definitivo,1,0,0,0.05,contropiede
+Valerio Farcomeni,SS Lazio,Lazio U20,definitivo,1,0,0,0.05,contropiede
+Toma Bašić,SS Lazio,Venezia,definitivo,1,-1,0,0.0,equilibrato
+Alessandro Milani,SS Lazio,Inter U23,definitivo,1,0,0,0.1,pressing
+Pietro Pinelli,SS Lazio,Carrarese,prestito,1,-1,1,0.0,equilibrato
+Elseid Hysaj,SS Lazio,svincolato,definitivo,1,-1,0,0.0,equilibrato
+Pedro,SS Lazio,svincolato,definitivo,1,-1,0,0.0,equilibrato
+Idrissa Gueye,Udinese Calcio,Metz,definitivo,1,0,0,0.0,equilibrato
+Nicolò Zaniolo,Udinese Calcio,Galatasaray,definitivo,1,0,0,0.0,equilibrato
+Unai Gómez,Udinese Calcio,Athletic Club,definitivo,1,0,0,0.0,equilibrato
+Giorgi Chakvetadze,Udinese Calcio,Watford,definitivo,1,0,0,0.0,equilibrato
+Omar Traoré,Udinese Calcio,Heidenheim,definitivo,1,0,0,0.0,equilibrato
+Giulio Vinciati,Udinese Calcio,Udinese U19,definitivo,1,0,0,0.0,contropiede
+Arthur Atta,Udinese Calcio,Fiorentina,definitivo,1,0,0,0.15,possesso
+Martín Payero,Udinese Calcio,Watford,definitivo,1,0,0,0.0,equilibrato
+Iker Bravo,Udinese Calcio,Watford,definitivo,1,0,0,0.0,equilibrato
+Răzvan Sava,Udinese Calcio,CS U Craiova,definitivo,1,0,0,0.0,equilibrato
+Damián Pizarro,Udinese Calcio,Audax Italiano,prestito,1,0,1,0.0,equilibrato
+Leonardo Buta,Udinese Calcio,Red Star FC,definitivo,1,0,0,0.0,equilibrato
+Luca Kjerrumgaard,Udinese Calcio,Watford,definitivo,1,0,0,0.0,equilibrato
+Jordan Zemura,Udinese Calcio,Watford,prestito,1,0,1,0.0,equilibrato
+Simone Pafundi,Udinese Calcio,Catanzaro,prestito,1,0,1,0.0,equilibrato
+Abdoulaye Camara,Udinese Calcio,Ajax,prestito,1,0,1,0.0,equilibrato
+Alessandro Nunziante,Udinese Calcio,Arezzo,prestito,1,0,1,0.0,equilibrato
+Kingsley Ehizibue,Udinese Calcio,svincolato,definitivo,1,0,0,0.0,equilibrato
+Arijanet Murić,US Sassuolo,Ipswich,definitivo,1,0,0,0.0,equilibrato
+Sebastian Walukiewicz,US Sassuolo,Torino,definitivo,1,0,0,0.05,equilibrato
+Rafa Obrador,US Sassuolo,Benfica,prestito,1,0,1,0.0,equilibrato
+Fedde Leysen,US Sassuolo,Union SG,prestito,1,0,1,0.0,equilibrato
+Kieron Bowie,US Sassuolo,Verona,prestito,1,0,1,0.05,pressing
+Tommaso Macchioni,US Sassuolo,Sassuolo U20,definitivo,1,0,0,0.0,equilibrato
+Giorgio Vezzosi,US Sassuolo,Sassuolo U20,definitivo,1,0,0,0.0,equilibrato
+Lorenzo Nyarko,US Sassuolo,Sassuolo U20,definitivo,1,0,0,0.0,equilibrato
+Tarik Muharemović,US Sassuolo,Leeds,definitivo,1,0,0,0.0,equilibrato
+Ruan,US Sassuolo,Atlético-MG,definitivo,1,0,0,0.0,equilibrato
+Gioele Zacchi,US Sassuolo,Union Brescia,prestito,1,-1,1,0.0,equilibrato
+Luca Moro,US Sassuolo,Padova,definitivo,1,0,0,0.0,equilibrato
+Borna Knezovic,US Sassuolo,Casarano,definitivo,1,0,0,0.0,equilibrato
+Emerick Lopes,US Sassuolo,Alcione,definitivo,1,0,0,0.0,equilibrato
+Samuele Mulattieri,US Sassuolo,Verona,prestito,1,0,1,0.05,pressing
+Kevin Bruno,US Sassuolo,Vado,prestito,1,0,1,0.0,equilibrato
+Kevin Leone,US Sassuolo,Arezzo,prestito,1,0,1,0.0,equilibrato
+Justin Kumi,US Sassuolo,Juve Stabia,prestito,1,0,1,0.0,equilibrato
+Flavio Russo,US Sassuolo,Catania,prestito,1,0,1,0.0,equilibrato
+Agustín Álvarez,US Sassuolo,CA Talleres,prestito,1,0,1,0.0,equilibrato
+Janis Antiste,US Sassuolo,Górnik Zabrze,prestito,1,0,1,0.0,equilibrato
+Luca D'Andrea,US Sassuolo,Cesena,prestito,1,0,1,0.0,equilibrato
+Francesco Corradini,US Sassuolo,Pineto,prestito,1,0,1,0.0,equilibrato
+Filippo Romagna,US Sassuolo,svincolato,definitivo,1,0,0,0.0,equilibrato
+Pedro Felipe,US Sassuolo,Juve Next Gen,prestito,1,0,1,0.0,equilibrato
+Ulisses Garcia,US Sassuolo,Marsiglia,prestito,1,0,1,0.0,equilibrato
+M'Bala Nzola,US Sassuolo,Fiorentina,prestito,1,0,1,0.15,possesso
+Woyo Coulibaly,US Sassuolo,Leicester City,prestito,1,0,1,0.0,equilibrato
+Aster Vranckx,US Sassuolo,Wolfsburg,prestito,1,0,1,0.0,equilibrato
+Tino Anjorin,Torino FC,Empoli,definitivo,1,-1,0,0.1,possesso
+Sandro Kulenović,Torino FC,Dinamo Zagabria,definitivo,1,0,0,0.0,equilibrato
+Kian Fitz-Jim,Torino FC,Ajax,definitivo,1,0,0,0.0,equilibrato
+Diego Mascardi,Torino FC,Spezia,definitivo,1,-1,0,0.0,equilibrato
+Niccolò Fortini,Torino FC,Fiorentina,prestito,1,0,1,0.15,possesso
+Pietro Comuzzo,Torino FC,Fiorentina,prestito,1,0,1,0.15,possesso
+Eray Cömert,Torino FC,Valencia,definitivo,1,0,0,0.0,equilibrato
+Gaetano Oristanio,Torino FC,Venezia,prestito,1,-1,1,0.0,equilibrato
+Tommaso Gabellini,Torino FC,Torino U20,definitivo,1,0,0,0.05,equilibrato
+Wisdom Acquah,Torino FC,Torino U20,definitivo,1,0,0,0.05,equilibrato
+Andrea Luongo,Torino FC,Torino U20,definitivo,1,0,0,0.05,equilibrato
+Demba Seck,Torino FC,Partizan,definitivo,1,0,0,0.0,equilibrato
+Saba Sazonov,Torino FC,Getafe CF,definitivo,1,0,0,0.0,equilibrato
+Guillermo Maripán,Torino FC,Internacional,definitivo,1,1,0,0.1,pressing
+Valentino Lazaro,Torino FC,Al-Ain,definitivo,1,0,0,0.0,equilibrato
+Zanos Savva,Torino FC,Olympiakos N.,definitivo,1,0,0,0.0,equilibrato
+Fabio Desole,Torino FC,Carpi,definitivo,1,0,0,0.0,equilibrato
+Jacopo Antolini,Torino FC,Pergolettese,definitivo,1,0,0,0.0,equilibrato
+Francesco Dell'Aquila,Torino FC,Vis Pesaro,definitivo,1,0,0,0.0,equilibrato
+Nicola Rauti,Torino FC,Vicenza,definitivo,1,0,0,0.0,equilibrato
+Matteo Brezzo,Torino FC,Chisola,prestito,1,0,1,0.0,equilibrato
+Alessandro Dellavalle,Torino FC,Padova,prestito,1,0,1,0.0,equilibrato
+Cristian Padula,Torino FC,Cerignola,prestito,1,0,1,0.0,equilibrato
+Tommaso Di Marco,Torino FC,Catania,prestito,1,0,1,0.0,equilibrato
+Aaron Ciammaglichella,Torino FC,Pro Vercelli,prestito,1,0,1,0.0,equilibrato
+Sergiu Perciun,Torino FC,Ascoli,prestito,1,-1,1,0.0,equilibrato
+Jonathan Silva,Torino FC,Mantova,prestito,1,0,1,0.0,equilibrato
+Adrien Tamèze,Torino FC,svincolato,definitivo,1,0,0,0.0,equilibrato
+Enzo Ebosse,Torino FC,Udinese,prestito,1,0,1,0.0,contropiede
+Luca Marianucci,Torino FC,Napoli,prestito,1,1,1,0.2,possesso
+Matteo Prati,Torino FC,Cagliari,prestito,1,-1,1,0.0,contropiede
+Niels Nkounkou,Torino FC,Eintracht,prestito,1,0,1,0.0,equilibrato
+David Romero,Parma Calcio,Tigre,definitivo,1,1,0,0.0,equilibrato
+Hans Nicolussi Caviglia,Parma Calcio,Venezia,definitivo,1,0,0,0.0,equilibrato
+Giovanni Daffara,Parma Calcio,Juve Next Gen,definitivo,1,1,0,0.0,equilibrato
+Benja Cremaschi,Parma Calcio,Miami,definitivo,1,1,0,0.0,equilibrato
+Ousmane Diallo,Parma Calcio,B. Dortmund II,definitivo,1,1,0,0.0,equilibrato
+Aymen Zouin,Parma Calcio,Inter U20,definitivo,1,1,0,0.1,pressing
+Simone Lontani,Parma Calcio,Milan U20,definitivo,1,1,0,0.15,pressing
+Thomás De Martis,Parma Calcio,Lanús,prestito,1,1,1,0.0,equilibrato
+Daniel Mikolajewski,Parma Calcio,Parma U20,definitivo,1,0,0,0.05,equilibrato
+Abdou-Salam Konate,Parma Calcio,Parma U20,definitivo,1,0,0,0.05,equilibrato
+Dominik Drobnic,Parma Calcio,Parma U20,definitivo,1,0,0,0.05,equilibrato
+Zion Suzuki,Parma Calcio,Aston Villa,definitivo,1,1,0,0.0,equilibrato
+Mateo Pellegrino,Parma Calcio,Fiorentina,definitivo,1,1,0,0.15,possesso
+Alessandro Circati,Parma Calcio,Benfica,definitivo,1,1,0,0.0,equilibrato
+Adrian Benedyczak,Parma Calcio,Kasimpasa,definitivo,1,1,0,0.0,equilibrato
+Tjas Begic,Parma Calcio,Sampdoria,definitivo,1,1,0,0.0,equilibrato
+Nahuel Estévez,Parma Calcio,Palermo,definitivo,1,1,0,0.0,equilibrato
+Anthony Partipilo,Parma Calcio,Barletta,definitivo,1,1,0,0.0,equilibrato
+Antoine Joujou,Parma Calcio,FC Nantes,definitivo,1,1,0,0.0,equilibrato
+Dario Sits,Parma Calcio,FC Dordrecht,prestito,1,1,1,0.0,equilibrato
+Jacob Ondrejka,Parma Calcio,FC Groningen,prestito,1,1,1,0.0,equilibrato
+Filippo Rinaldi,Parma Calcio,Catania,prestito,1,1,1,0.0,equilibrato
+Gabriel Strefezza,Parma Calcio,Olympiacos,prestito,1,1,1,0.0,equilibrato
+Giuseppe Aurelio,Cagliari Calcio,Spezia,definitivo,1,0,0,0.0,equilibrato
+Jacopo Fazzini,Cagliari Calcio,Fiorentina,prestito,1,1,1,0.15,possesso
+Demi Akarakiri,Cagliari Calcio,Everton U18,definitivo,1,1,0,0.0,equilibrato
+Kevin Carlos,Cagliari Calcio,Nizza,prestito,1,1,1,0.0,equilibrato
+Harry Winks,Cagliari Calcio,Leicester City,definitivo,1,1,0,0.0,equilibrato
+Raphael Kofler,Cagliari Calcio,Südtirol,prestito,1,1,1,0.0,equilibrato
+Nicola Grandu,Cagliari Calcio,Cagliari U20,definitivo,1,0,0,0.0,contropiede
+Ivan Sulev,Cagliari Calcio,Cagliari U20,definitivo,1,0,0,0.0,contropiede
+Nik Prelec,Cagliari Calcio,Oxford United,definitivo,1,1,0,0.0,equilibrato
+Alessandro Vinciguerra,Cagliari Calcio,Cerignola,definitivo,1,1,0,0.0,equilibrato
+Giuseppe Ciocci,Cagliari Calcio,Spezia,definitivo,1,0,0,0.0,equilibrato
+Mateusz Wieteska,Cagliari Calcio,Wieczysta,definitivo,1,1,0,0.0,equilibrato
+Davide Veroli,Cagliari Calcio,Südtirol,prestito,1,1,1,0.0,equilibrato
+Nicola Pintus,Cagliari Calcio,Pianese,prestito,1,1,1,0.0,equilibrato
+Francesco Gallea,Cagliari Calcio,Juve Stabia,prestito,1,1,1,0.0,equilibrato
+Velizar-Iliya Iliev,Cagliari Calcio,Cosenza,prestito,1,1,1,0.0,equilibrato
+Othniël Raterink,Cagliari Calcio,ADO Den Haag,prestito,1,1,1,0.0,equilibrato
+Andrea Belotti,Cagliari Calcio,svincolato,definitivo,1,1,0,0.0,equilibrato
+Leonardo Pavoletti,Cagliari Calcio,svincolato,definitivo,1,1,0,0.0,equilibrato
+Alberto Dossena,Cagliari Calcio,Como,prestito,1,0,1,0.1,possesso
+Ibrahim Sulemana,Cagliari Calcio,Atalanta,prestito,1,1,1,0.15,pressing
+Semih Kılıçsoy,Cagliari Calcio,Besiktas,prestito,1,1,1,0.0,equilibrato
+Luca Mazzitelli,Cagliari Calcio,Como,prestito,1,0,1,0.1,possesso
+Michael Folorunsho,Cagliari Calcio,Napoli,prestito,1,1,1,0.2,possesso
+Christ Inao Oulaï,ACF Fiorentina,Trabzonspor,definitivo,1,0,0,0.0,equilibrato
+Viery,ACF Fiorentina,Grêmio,definitivo,1,0,0,0.0,equilibrato
+Víctor Valdepeñas,ACF Fiorentina,RM Castiglia,definitivo,1,0,0,0.0,equilibrato
+Radu Drăgușin,ACF Fiorentina,Tottenham,prestito,1,0,1,0.0,equilibrato
+Franco Mastantuono,ACF Fiorentina,Real Madrid,prestito,1,0,1,0.0,equilibrato
+Federico Croci,ACF Fiorentina,Fiorentina U17,definitivo,1,0,0,0.15,possesso
+Nicolás Valentini,ACF Fiorentina,Alavés,definitivo,1,0,0,0.0,equilibrato
+Lorenzo Amatucci,ACF Fiorentina,Dep. A Coruña,definitivo,1,0,0,0.0,equilibrato
+Jonas Harder,ACF Fiorentina,Basilea,definitivo,1,0,0,0.0,equilibrato
+Luis Balbo,ACF Fiorentina,Sturm Graz,definitivo,1,0,0,0.0,equilibrato
+Riccardo Braschi,ACF Fiorentina,FC Thun,definitivo,1,0,0,0.0,equilibrato
+Alessandro Bianco,ACF Fiorentina,Modena,definitivo,1,0,0,0.0,equilibrato
+Lorenzo Lucchesi,ACF Fiorentina,Monza,definitivo,1,-1,0,0.05,equilibrato
+Matías Moreno,ACF Fiorentina,Venezia,prestito,1,-1,1,0.0,equilibrato
+Lucas Beltrán,ACF Fiorentina,River Plate,prestito,1,0,1,0.0,equilibrato
+Filippo Distefano,ACF Fiorentina,Empoli,definitivo,1,-1,0,0.1,possesso
+Abdelhamid Sabiri,ACF Fiorentina,Eyüpspor,definitivo,1,0,0,0.0,equilibrato
+Tariq Lamptey,ACF Fiorentina,QPR,definitivo,1,0,0,0.0,equilibrato
+Robin Gosens,ACF Fiorentina,Schalke 04,prestito,1,0,1,0.0,equilibrato
+Leonardo Baroncelli,ACF Fiorentina,Gubbio,definitivo,1,0,0,0.0,equilibrato
+Tommaso Vannucchi,ACF Fiorentina,Arzignano,prestito,1,0,1,0.0,equilibrato
+Tommaso Martinelli,ACF Fiorentina,Avellino,prestito,1,0,1,0.0,equilibrato
+Giulio Scuderi,ACF Fiorentina,Juve Stabia,prestito,1,0,1,0.0,equilibrato
+Mirko Elia,ACF Fiorentina,Bari,prestito,1,0,1,0.0,equilibrato
+Amir Richardson,ACF Fiorentina,Le Havre,prestito,1,0,1,0.0,equilibrato
+Maat Daniel Caprini,ACF Fiorentina,Cesena,prestito,1,0,1,0.0,equilibrato
+Lorenzo Romani,ACF Fiorentina,Carrarese,prestito,1,0,1,0.0,equilibrato
+Eddy Kouadio,ACF Fiorentina,Monza,prestito,1,-1,1,0.05,equilibrato
+Laerte Tognetti,ACF Fiorentina,svincolato,definitivo,1,0,0,0.0,equilibrato
+Daniele Rugani,ACF Fiorentina,Juventus,prestito,1,1,1,0.05,equilibrato
+Jack Harrison,ACF Fiorentina,Leeds,prestito,1,0,1,0.0,equilibrato
+Manor Solomon,ACF Fiorentina,Tottenham,prestito,1,0,1,0.0,equilibrato
+David Puczka,Genoa CFC,Juve Next Gen,definitivo,1,0,0,0.0,equilibrato
+Djibril Sow,Genoa CFC,Siviglia,definitivo,1,0,0,0.0,equilibrato
+Franz-Ethan Meichtry,Genoa CFC,FC Thun,definitivo,1,0,0,0.0,equilibrato
+Samuel Wiafe,Genoa CFC,Modena,definitivo,1,0,0,0.0,equilibrato
+Elias Havel,Genoa CFC,TSV Hartberg,definitivo,1,0,0,0.0,equilibrato
+Hamed Traoré,Genoa CFC,Marsiglia,prestito,1,0,1,0.0,equilibrato
+Mario Mitaj,Genoa CFC,Al-Ittihad,prestito,1,0,1,0.0,equilibrato
+Marcelo Vaz,Genoa CFC,Varesina,definitivo,1,0,0,0.0,equilibrato
+Joi Nuredini,Genoa CFC,Genoa U20,definitivo,1,0,0,0.0,equilibrato
+Mamedi Doucouré,Genoa CFC,Genoa U20,definitivo,1,0,0,0.0,equilibrato
+David Ankeye,Genoa CFC,Zelez. Pancevo,definitivo,1,0,0,0.0,equilibrato
+Alessandro Vogliacco,Genoa CFC,Cremonese,definitivo,1,-1,0,0.0,equilibrato
+Ruslan Malinovskyi,Genoa CFC,Trabzonspor,definitivo,1,0,0,0.0,equilibrato
+Leonardo Consiglio,Genoa CFC,Modena,definitivo,1,0,0,0.0,equilibrato
+Nicola Leali,Genoa CFC,Verona,definitivo,1,0,0,0.05,pressing
+Hugo Cuenca,Genoa CFC,Celta Fortuna,prestito,1,0,1,0.0,equilibrato
+Alessandro Debenedetti,Genoa CFC,Cesena,prestito,1,0,1,0.0,equilibrato
+Patrizio Masini,Genoa CFC,Frosinone,prestito,1,-1,1,0.05,pressing
+Chec Bebel Doumbia,Genoa CFC,Rapid Bucarest,prestito,1,0,1,0.0,equilibrato
+Gabriele Pessolani,Genoa CFC,Crema,prestito,1,0,1,0.0,equilibrato
+Simone Calvani,Genoa CFC,Vado,prestito,1,0,1,0.0,equilibrato
+Tommaso Pittino,Genoa CFC,Livorno,prestito,1,0,1,0.0,equilibrato
+Lorenzo Gagliardi,Genoa CFC,Team Altamura,prestito,1,0,1,0.0,equilibrato
+Gianluca Rossi,Genoa CFC,Treviso,prestito,1,0,1,0.0,equilibrato
+Edoardo Meconi,Genoa CFC,Gubbio,prestito,1,0,1,0.0,equilibrato
+Caleb Ekuban,Genoa CFC,svincolato,definitivo,1,0,0,0.0,equilibrato
+Benjamin Siegrist,Genoa CFC,Rapid Bucarest,prestito,1,0,1,0.0,equilibrato
+Nils Zätterström,Genoa CFC,Sheff Utd,prestito,1,0,1,0.0,equilibrato
+Maxwel Cornet,Genoa CFC,West Ham Utd.,prestito,1,0,1,0.0,equilibrato
+Jean Onana,Genoa CFC,Besiktas,prestito,1,0,1,0.0,equilibrato
+Willem Geubbels,US Lecce,Paris FC,definitivo,1,1,0,0.0,equilibrato
+Marco Bleve,US Lecce,Carrarese,definitivo,1,1,0,0.0,equilibrato
+Plamen Penev,US Lecce,Lecce U20,definitivo,1,0,0,0.0,contropiede
+Niko Kovač,US Lecce,Lecce U20,definitivo,1,0,0,0.0,contropiede
+Hjalte Lærke,US Lecce,Lecce U20,definitivo,1,0,0,0.0,contropiede
+Paco Esteban,US Lecce,Lecce U20,definitivo,1,0,0,0.0,contropiede
+Olaf Gorter,US Lecce,Lecce U20,definitivo,1,0,0,0.0,contropiede
+Francesco Camarda,US Lecce,Milan,prestito,1,1,1,0.15,pressing
+Christian Früchtl,US Lecce,Salisburgo,definitivo,1,1,0,0.0,equilibrato
+Giacomo Faticanti,US Lecce,Juve Next Gen,definitivo,1,1,0,0.0,equilibrato
+Ylber Ramadani,US Lecce,Corum FK,definitivo,1,1,0,0.0,equilibrato
+Matteo Agrimi,US Lecce,Flaminia,definitivo,1,1,0,0.0,equilibrato
+Thórir Jóhann Helgason,US Lecce,Venezia,definitivo,1,0,0,0.0,equilibrato
+Lameck Banda,US Lecce,Swehly,definitivo,1,1,0,0.0,equilibrato
+Jasper Samooja,US Lecce,HJK Helsinki,prestito,1,1,1,0.0,equilibrato
+Filip Marchwiński,US Lecce,Cracovia,prestito,1,1,1,0.0,equilibrato
+Matías Pérez,US Lecce,La Serena,prestito,1,1,1,0.0,equilibrato
+Marco Delle Monache,US Lecce,Pineto,prestito,1,1,1,0.0,equilibrato
+Álex Sala,US Lecce,RCD Mallorca,prestito,1,1,1,0.0,equilibrato
+Ed McJannet,US Lecce,Cosenza,prestito,1,1,1,0.0,equilibrato
+Rareș Burnete,US Lecce,Südtirol,prestito,1,1,1,0.0,equilibrato
+Walid Cheddira,US Lecce,Napoli,prestito,1,1,1,0.2,possesso
+Riccardo Sottil,US Lecce,Fiorentina,prestito,1,1,1,0.15,possesso
+Akor Adams,Venezia FC,Siviglia,definitivo,1,1,0,0.0,equilibrato
+Albion Rrahmani,Venezia FC,Sparta Praga,definitivo,1,1,0,0.0,equilibrato
+Armel Bella-Kotchap,Venezia FC,Verona,definitivo,1,1,0,0.05,pressing
+Redouane Halhal,Venezia FC,KV Mechelen,definitivo,1,1,0,0.0,equilibrato
+Kornel Lisman,Venezia FC,Lech Poznan,definitivo,1,1,0,0.0,equilibrato
+Ale Gomes,Venezia FC,Real Saragozza,definitivo,1,1,0,0.0,equilibrato
+Bartol Franjic,Venezia FC,Wolfsburg,definitivo,1,1,0,0.0,equilibrato
+Mattia Compagnon,Venezia FC,Juve Next Gen,definitivo,1,1,0,0.0,equilibrato
+Lorenzo Berardi,Venezia FC,Pescara,definitivo,1,1,0,0.0,equilibrato
+Lorenzo Montipò,Venezia FC,Verona,definitivo,1,1,0,0.05,pressing
+Thierry Correia,Venezia FC,Valencia,definitivo,1,1,0,0.0,equilibrato
+Federico Tavernaro,Venezia FC,Vis Pesaro,definitivo,1,1,0,0.0,equilibrato
+Alessio Pozzi,Venezia FC,Vis Pesaro,definitivo,1,1,0,0.0,equilibrato
+Mohamed Malang Touré,Venezia FC,Venezia U19,definitivo,1,0,0,0.0,equilibrato
+Issa Doumbia,Venezia FC,Sporting,definitivo,1,1,0,0.0,equilibrato
+Michael Svoboda,Venezia FC,Brighton,definitivo,1,1,0,0.0,equilibrato
+Nunzio Lella,Venezia FC,Verona,definitivo,1,1,0,0.05,pressing
+Cheick Condé,Venezia FC,SK Beveren,definitivo,1,1,0,0.0,equilibrato
+Stefano Minelli,Venezia FC,Desenzano,definitivo,1,1,0,0.0,equilibrato
+Giorgio Altare,Venezia FC,Pescara,definitivo,1,1,0,0.0,equilibrato
+Giovanni Di Renzo,Venezia FC,Pineto,definitivo,1,1,0,0.0,equilibrato
+Lorenzo Busato,Venezia FC,Sandonà,definitivo,1,1,0,0.0,equilibrato
+Bjarki Bjarkason,Venezia FC,Südtirol,definitivo,1,1,0,0.0,equilibrato
+Simone Ascione,Venezia FC,Vis Pesaro,definitivo,1,1,0,0.0,equilibrato
+Ahmed Sidibé,Venezia FC,Vit. Guimarães,prestito,1,1,1,0.0,equilibrato
+Michael Venturi,Venezia FC,Avellino,prestito,1,1,1,0.0,equilibrato
+Seid Korac,Venezia FC,Verona,prestito,1,1,1,0.05,pressing
+Daniel Fila,Venezia FC,Avellino,prestito,1,1,1,0.0,equilibrato
+Kevin Cannavò,Venezia FC,Spezia,prestito,1,0,1,0.0,equilibrato
+Alessandro Plizzari,Venezia FC,Südtirol,prestito,1,1,1,0.0,equilibrato
+Marco Ladisa,Venezia FC,Trento,prestito,1,1,1,0.0,equilibrato
+Alessandro Pietrelli,Venezia FC,Juve Next Gen,prestito,1,1,1,0.0,equilibrato
+Romano Schmid,Frosinone Calcio,Werder Brema,definitivo,1,1,0,0.0,equilibrato
+Aleksa Terzić,Frosinone Calcio,Salisburgo,definitivo,1,1,0,0.0,equilibrato
+Omar Fayed,Frosinone Calcio,Fenerbahce,definitivo,1,1,0,0.0,equilibrato
+Giacomo Calò,Frosinone Calcio,Cesena,definitivo,1,1,0,0.0,equilibrato
+Florian Grillitsch,Frosinone Calcio,SC Braga,definitivo,1,1,0,0.0,equilibrato
+Kevin Akpoguma,Frosinone Calcio,Hoffenheim,definitivo,1,1,0,0.0,equilibrato
+Anouar El Azzouzi,Frosinone Calcio,Düsseldorf,definitivo,1,1,0,0.0,equilibrato
+Sebastiano Desplanches,Frosinone Calcio,Palermo,prestito,1,1,1,0.0,equilibrato
+Muhammed Colley,Frosinone Calcio,Frosinone U19,definitivo,1,0,0,0.05,pressing
+Alejandro Cichero,Frosinone Calcio,Frosinone U19,definitivo,1,0,0,0.05,pressing
+Davide Biraschi,Frosinone Calcio,Karagümrük,definitivo,1,1,0,0.0,equilibrato
+Edoardo Masciangelo,Frosinone Calcio,Catania,definitivo,1,1,0,0.0,equilibrato
+Riccardo Marchizza,Frosinone Calcio,Vicenza,definitivo,1,1,0,0.0,equilibrato
+Sergio Kalaj,Frosinone Calcio,Spezia,definitivo,1,0,0,0.0,equilibrato
+Abdoulie Ndow,Frosinone Calcio,Spezia,definitivo,1,0,0,0.0,equilibrato
+Alessandro Selvini,Frosinone Calcio,Pineto,definitivo,1,1,0,0.0,equilibrato
+Lorenzo Gori,Frosinone Calcio,Grosseto,prestito,1,1,1,0.0,equilibrato
+Jacopo Gelli,Frosinone Calcio,Cesena,prestito,1,1,1,0.0,equilibrato
+Edoardo Vergani,Frosinone Calcio,svincolato,definitivo,1,1,0,0.0,equilibrato
+Antonio Fiori,Frosinone Calcio,Mantova,prestito,1,1,1,0.0,equilibrato
+Massimo Zilli,Frosinone Calcio,Cosenza,prestito,1,1,1,0.0,equilibrato
+Gustavo Varela,AC Monza,Benfica B,definitivo,1,1,0,0.0,equilibrato
+Idrissa Touré,AC Monza,Pisa,definitivo,1,1,0,0.0,equilibrato
+Foe Ondoa,AC Monza,Estoril U23,definitivo,1,1,0,0.0,equilibrato
+Ricardo Mangas,AC Monza,Sporting,prestito,1,1,1,0.0,equilibrato
+Jay Robinson,AC Monza,Southampton,prestito,1,1,1,0.0,equilibrato
+Mathis Mout,AC Monza,Monza U20,definitivo,1,0,0,0.05,equilibrato
+Hernani,AC Monza,Palermo,definitivo,1,1,0,0.0,equilibrato
+Luca Ravanelli,AC Monza,Sampdoria,definitivo,1,1,0,0.0,equilibrato
+Mirko Marić,AC Monza,NK Lokomotiva,definitivo,1,1,0,0.0,equilibrato
+Paulo Azzi,AC Monza,Modena,definitivo,1,1,0,0.0,equilibrato
+Andrea Petagna,AC Monza,Pisa,definitivo,1,1,0,0.0,equilibrato
+Arvid Brorsson,AC Monza,Raków,definitivo,1,1,0,0.0,equilibrato
+Alessandro Sorrentino,AC Monza,Padova,definitivo,1,1,0,0.0,equilibrato
+Samuele Capolupo,AC Monza,Spezia,prestito,1,0,1,0.0,equilibrato
+Pedro Obiang,AC Monza,AC Monza,definitivo,1,0,0,0.05,equilibrato
+Giuseppe Caso,AC Monza,Modena,prestito,1,1,1,0.0,equilibrato
