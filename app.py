@@ -27,6 +27,14 @@ importlib.reload(_auc)
 from importer import import_real_quotazioni
 from optimizer import optimize_team
 from predict import train_prediction_model
+
+@st.cache_data(show_spinner=False)
+def _get_cached_predictions(df, strat):
+    # Usiamo _df solo per invalidare la cache se cambia
+    if df is not None:
+        df.to_csv(INPUT_TEMP, index=False)
+        return train_prediction_model(INPUT_TEMP, strategy=strat)
+    return None
 from simulator import run_performance_comparison
 from scraper_fantacalcio import fetch_and_save_stats, save_manual_excel, load_cached_stats
 from scraper_transfermarkt import fetch_and_save_transfers, load_cached_transfers
@@ -63,13 +71,10 @@ def _cache_age_str(path: str) -> str:
 
 # ── Helper: mappa nome strategia → chiave interna ─────────────────────────────
 def _strategy_key(label: str) -> str:
-    if "Listone" in label:
-        return "listone"
-    if "Conserv" in label:
-        return "conservativa"
-    if "Agg" in label:
-        return "aggressiva"
-    return "scommesse"
+    if "Aggressiva" in label: return "aggressiva"
+    if "Moneyball" in label: return "moneyball"
+    if "Sprint" in label: return "sprint_calendario"
+    return "master"
 
 
 # ── Spiegazione IA ────────────────────────────────────────────────────────────
@@ -572,13 +577,13 @@ budget = st.sidebar.number_input(
     help="Digita il valore esatto o usa le frecce. Range: 100–1000 cr.",
 )
 strategy_label = st.sidebar.selectbox(
-    "Strategia IA",
-    ["🏆 Listone Master (11 Top)", "Conservativa (MV)", "Aggressiva (Bonus)", "Scommesse (Hype)"],
+    "🎯 Strategia Asta",
+    ["🏆 Listone Master (Equilibrata)", "⚔️ Aggressiva (Trazione Anteriore)", "💎 Moneyball (VIP & Sottovalutati)", "🚀 Sprint Iniziale (Focus Calendario)"],
     help=(
-        "🏆 Listone Master: 88% budget sui 11 Super-Top Titolari + 14 riserve 1cr a titolarità garantita.\n"
-        "Conservativa: si fida della fanta_media storica — bassa varianza.\n"
-        "Aggressiva: premia chi fa gol e assist — alta volatilità.\n"
-        "Scommesse: premia i sottovalutati (qualità/prezzo) — massima sorpresa."
+        "Master: cerca i migliori 11 titolari e riserve a 1 cr equilibrando il budget.\n"
+        "Aggressiva: budget quasi tutto su centrocampo e attacco, difesa low cost.\n"
+        "Moneyball: cerca giocatori con statistiche tattiche nascoste ad alto potenziale.\n"
+        "Sprint Iniziale: massimizza i giocatori con calendario super-facile."
     ),
 )
 strategy = _strategy_key(strategy_label)
@@ -589,42 +594,41 @@ st.sidebar.subheader("📡 Stats Fantacalcio.it")
 _fc_cache_path = os.path.join(DATA_DIR, "fantacalcio_stats_cache.csv")
 
 # Opzione A: login automatico con credenziali
-with st.sidebar.expander("🔑 Login automatico (email + password)"):
-    st.caption(
-        "Il sito Fantacalcio.it è una SPA (app JavaScript): i dati non sono nel HTML pubblico. "
-        "Inserisci le tue credenziali per scaricare automaticamente l'Excel ufficiale."
-    )
-    fc_email    = st.text_input("Email", key="fc_email", placeholder="tua@email.it")
-    fc_password = st.text_input("Password", key="fc_password", type="password")
-    if st.button("🔄 Scarica Stats (login auto)"):
-        with st.sidebar.status("Login + download da Fantacalcio.it...") as s:
-            try:
-                ok, msg = fetch_and_save_stats(
-                    email=st.session_state.get("fc_email", ""),
-                    password=st.session_state.get("fc_password", ""),
-                )
-                s.update(label=msg if ok else f"❌ {msg}", state="complete" if ok else "error", expanded=False)
-            except Exception as e:
-                s.update(label=f"❌ {e}", state="error")
 
-# Opzione B: upload manuale Excel (raccomandato se il login automatico non funziona)
-with st.sidebar.expander("📂 Upload Excel manuale (alternativa)"):
+with st.sidebar.expander("📥 CARICA LISTONE FANTACALCIO", expanded=True):
     st.caption(
-        "1. Vai su **fantacalcio.it** nel tuo browser e accedi\n"
-        "2. Apri la pagina **Statistiche Serie A**\n"
-        "3. Clicca il pulsante **Excel** per scaricare il file\n"
-        "4. Carica il file qui sotto"
+        "**Devi caricare SOLO il file delle QUOTAZIONI della nuova stagione!**\n\n"
+        "Non ti serve scaricare le 'Statistiche' della scorsa stagione, perché "
+        "l'Intelligenza Artificiale recupererà da sola i voti, i gol e gli infortuni "
+        "dal web incrociandoli in automatico con il tuo listone nuovo."
     )
     fc_excel_file = st.file_uploader(
-        "Carica Excel Fantacalcio.it", type=["xlsx", "xls"], key="fc_excel_upload"
+        "Seleziona il file (Excel o CSV)", type=["xlsx", "xls", "csv"], key="fc_excel_upload"
     )
     if fc_excel_file is not None:
-        with st.sidebar.status("Importazione Excel...") as s:
-            try:
-                ok, msg = save_manual_excel(fc_excel_file.getvalue())
-                s.update(label=msg if ok else f"❌ {msg}", state="complete" if ok else "error", expanded=False)
-            except Exception as e:
-                s.update(label=f"❌ {e}", state="error")
+        file_id = fc_excel_file.name + str(fc_excel_file.size)
+        if st.session_state.get("last_uploaded_file") != file_id:
+            with st.sidebar.status("Importazione Listone...") as s:
+                try:
+                    from importer import import_real_quotazioni
+                    import tempfile
+                    import os
+                    ext = os.path.splitext(fc_excel_file.name)[1]
+                    with tempfile.NamedTemporaryFile(suffix=ext, delete=False) as f_tmp:
+                        f_tmp.write(fc_excel_file.getvalue())
+                        tmp_name = f_tmp.name
+                    
+                    new_df = import_real_quotazioni(tmp_name)
+                    if new_df is not None and not new_df.empty:
+                        QUOTAZIONI_PATH = os.path.join(DATA_DIR, "quotazioni_correnti.csv")
+                        new_df.to_csv(QUOTAZIONI_PATH, index=False)
+                        st.session_state["last_uploaded_file"] = file_id
+                        _get_cached_predictions.clear()
+                        s.update(label=f"✅ {len(new_df)} giocatori caricati!", state="complete", expanded=False)
+                    else:
+                        s.update(label="❌ Formato file non riconosciuto", state="error", expanded=False)
+                except Exception as e:
+                    s.update(label=f"❌ {e}", state="error")
 
 cached_stats = load_cached_stats()
 if cached_stats is not None:
@@ -633,6 +637,27 @@ if cached_stats is not None:
     )
 else:
     st.sidebar.caption("⚠️ Stats: nessuna cache — usa login auto o carica l'Excel manualmente")
+
+# ── Dati FBref (Statistiche Storiche) ─────────────────────────────────────────
+st.sidebar.subheader("📈 Statistiche Avanzate (FBref)")
+with st.sidebar.expander("Importa Statistiche FBref (Opzionale)"):
+    st.caption(
+        "Essendo bloccato da Cloudflare, devi incollare i dati FBref manualmente per far "
+        "imparare all'IA i dati della scorsa stagione:\n"
+        "1. Apri [fbref.com/it/comps/11/stats/Serie-A-Stats](https://fbref.com/it/comps/11/stats/Serie-A-Stats)\n"
+        "2. Scorri fino alla tabella 'Standard Stats'\n"
+        "3. Clicca 'Share & Export' → 'Get table as CSV'\n"
+        "4. Incolla il testo qui sotto:"
+    )
+    fbref_csv_text = st.text_area("Incolla CSV FBref", height=100)
+    if st.button("💾 Salva FBref Cache"):
+        if fbref_csv_text.strip():
+            with open(os.path.join(DATA_DIR, "fbref_stats_cache.csv"), "w", encoding="utf-8") as fb:
+                fb.write(fbref_csv_text)
+            _get_cached_predictions.clear()
+            st.success("✅ Statistiche FBref salvate con successo!")
+        else:
+            st.error("Incolla il testo prima di salvare.")
 
 # ── Mercato ───────────────────────────────────────────────────────────────────
 st.sidebar.subheader("🔀 Mercato")
@@ -701,44 +726,23 @@ news_input = st.sidebar.text_area(
     help="Aggiornate automaticamente da fantacalcio.it/calciomercato ogni 30 minuti. Puoi modificare il testo prima di generare la rosa.",
 )
 
-# ── File uploader + caricamento dati ─────────────────────────────────────────
-uploaded_file = st.sidebar.file_uploader("Carica Quotazioni (.csv, .xlsx)", type=["csv", "xlsx"])
-
 QUOTAZIONI_PATH = os.path.join(DATA_DIR, "quotazioni_correnti.csv")
-
 data_df = None
-if uploaded_file is not None:
-    ext = os.path.splitext(uploaded_file.name)[1]
-    tmp = os.path.join(BASE_DIR, f"temp_quotazioni{ext}")
-    with open(tmp, "wb") as f:
-        f.write(uploaded_file.getbuffer())
-    data_df = import_real_quotazioni(tmp)
-    if data_df is not None:
-        data_df.to_csv(QUOTAZIONI_PATH, index=False)
-        st.sidebar.success(f"✅ {len(data_df)} giocatori caricati (Stagione Corrente).")
-        with st.expander("👀 Anteprima Listone Caricato"):
-            st.dataframe(data_df.head(10))
-    else:
-        st.sidebar.warning("⚠️ File non leggibile. Uso dati in cache come fallback.")
-        if os.path.exists(QUOTAZIONI_PATH):
-            data_df = pd.read_csv(QUOTAZIONI_PATH)
-        elif os.path.exists(DEFAULT_DATA):
-            data_df = pd.read_csv(DEFAULT_DATA)
+
+if os.path.exists(QUOTAZIONI_PATH):
+    try:
+        data_df = pd.read_csv(QUOTAZIONI_PATH)
+        st.sidebar.caption(f"📋 Dataset Attivo: Listone Corrente ({len(data_df)} giocatori)")
+    except Exception as e:
+        st.sidebar.error(f"Errore caricamento cache: {e}")
+elif os.path.exists(DEFAULT_DATA):
+    try:
+        data_df = pd.read_csv(DEFAULT_DATA)
+        st.sidebar.caption("📋 Dataset Attivo: Demo 23/24")
+    except Exception as e:
+        st.sidebar.error(f"Errore: {e}")
 else:
-    if os.path.exists(QUOTAZIONI_PATH):
-        try:
-            data_df = pd.read_csv(QUOTAZIONI_PATH)
-            st.sidebar.caption(f"📋 Dataset Attivo: Listone Corrente ({len(data_df)} giocatori)")
-        except Exception as e:
-            st.sidebar.error(f"Errore caricamento cache: {e}")
-    elif os.path.exists(DEFAULT_DATA):
-        try:
-            data_df = pd.read_csv(DEFAULT_DATA)
-            st.sidebar.caption("📋 Dataset Attivo: Demo 23/24")
-        except Exception as e:
-            st.sidebar.error(f"Errore: {e}")
-    else:
-        st.sidebar.warning("Nessun dato. Carica un file.")
+    st.sidebar.warning("Nessun dato. Carica un file.")
 
 # ── AUTO-REFRESH INFORTUNI ────────────────────────────────────────────────────
 # Aggiorna automaticamente se la cache è più vecchia di INJURIES_STALE_HOURS
@@ -772,7 +776,7 @@ st.sidebar.caption(
 
 
 # ── Tabs ──────────────────────────────────────────────────────────────────────
-tab_opt, tab_copilot, tab_lineup, tab_top, tab_search, tab_vip, tab_inj, tab_bt = st.tabs([
+tab_opt, tab_copilot, tab_lineup, tab_top, tab_search, tab_vip, tab_inj, tab_cal, tab_bt = st.tabs([
     "🏆 Ottimizza Rosa",
     "⚡ Copilota Asta",
     "🗓️ Formazione Live",
@@ -780,6 +784,7 @@ tab_opt, tab_copilot, tab_lineup, tab_top, tab_search, tab_vip, tab_inj, tab_bt 
     "🔍 Cerca Giocatore",
     "💎 VIP Radar",
     "🏥 Infortuni",
+    "📅 Calendario",
     "🔬 Backtest",
 ])
 
@@ -793,7 +798,7 @@ with tab_opt:
             with st.spinner(f"IA ({strategy_label}) in elaborazione…"):
                 data_df.to_csv(INPUT_TEMP, index=False)
                 # ← strategia passata qui
-                df_pred = train_prediction_model(INPUT_TEMP, strategy=strategy)
+                df_pred = _get_cached_predictions(data_df, strategy).copy() if _get_cached_predictions(data_df, strategy) is not None else None
 
                 if news_input:
                     from news_agent import apply_news_modifiers
@@ -854,11 +859,19 @@ with tab_opt:
                     st.metric("⚽ Punteggio Previsto / giornata", punteggio_g)
                     st.metric("📅 Proiezione Stagionale (38 g.)", punteggio_s)
                     st.metric("💰 Costo Totale", int(team["costo_iniziale"].sum()))
+                
                 with col2:
                     st.subheader("📊 Confronto con Top Account")
                     report = run_performance_comparison(team)
                     st.table(report)
                     st.bar_chart(team.groupby("ruolo")["costo_iniziale"].sum())
+                
+                st.write("---")
+                with st.expander("🤖 📋 Leggi i Report Scout dell'IA per i 25 scelti"):
+                    from predict import build_player_explanation
+                    for idx, row in team.sort_values(by=['ruolo', 'previsione_ia'], ascending=[False, False]).iterrows():
+                        st.markdown(build_player_explanation(row))
+                        st.write("---")
 
                 # ── Spiegazione IA ──────────────────────────────────────────
                 st.markdown("---")
@@ -911,7 +924,7 @@ with tab_copilot:
     if data_df is not None:
         if os.path.exists(INPUT_TEMP):
             with st.spinner("Inizializzazione IA Copilot..."):
-                df_cop = train_prediction_model(INPUT_TEMP, strategy=strategy)
+                df_cop = _get_cached_predictions(data_df, strategy)
         else:
             df_cop = data_df.copy()
             
@@ -1060,7 +1073,7 @@ with tab_top:
     else:
         with st.spinner("Calcolo in corso..."):
             data_df.to_csv(INPUT_TEMP, index=False)
-            df_s = train_prediction_model(INPUT_TEMP, strategy=strategy)
+            df_s = _get_cached_predictions(data_df, strategy)
 
         # Rapporto qualità/prezzo normalizzato per reparto per evitare che 1cr monopolizzi
         df_s["convenienza"] = df_s["previsione_ia"] / (df_s["costo_iniziale"].clip(lower=1) + 2)
@@ -1098,7 +1111,7 @@ with tab_search:
         if query.strip():
             data_df.to_csv(INPUT_TEMP, index=False)
             # ← strategia passata qui
-            df_all = train_prediction_model(INPUT_TEMP, strategy=strategy)
+            df_all = _get_cached_predictions(data_df, strategy)
             mask = df_all["nome"].str.contains(query.strip(), case=False, na=False)
             risultati = df_all[mask]
             if risultati.empty:
@@ -1131,7 +1144,7 @@ with tab_vip:
         else:
             with st.spinner("Calcolo VIP in corso..."):
                 data_df.to_csv(INPUT_TEMP, index=False)
-                df_vip = train_prediction_model(INPUT_TEMP, strategy=strategy)
+                df_vip = _get_cached_predictions(data_df, strategy)
 
             vip_cols = [c for c in [
                 "nome", "ruolo", "costo_iniziale",
@@ -1190,56 +1203,14 @@ with tab_vip:
                 )
 
     with col_vip2:
-        st.markdown("#### Aggiungi override tattico")
-        vip_nome    = st.text_input("Nome giocatore", key="vip_add_nome", placeholder="es. Nico Paz")
-        vip_pos     = st.selectbox("Posizione tattica", [
-            "QUINTO_ATT", "QUINTO_DUTTILE", "ALA", "ALA_TREQUARTISTA",
-            "TREQUARTISTA", "MEZZALA_ATT", "MEZZALA_DEF", "REGISTA",
-        ], key="vip_pos")
-        vip_bonus   = st.slider("Bonus moltiplicatore", 1.05, 1.50, 1.25, 0.01, key="vip_bonus",
-                                help="1.0=nessun bonus, 1.5=+50% bonus atteso")
-        vip_note    = st.text_input("Note (opzionale)", key="vip_note")
-        if st.button("💾 Salva override tattico"):
-            try:
-                from vip import add_tactical_override
-                ok = add_tactical_override(vip_nome, vip_pos, vip_bonus, vip_note)
-                if ok:
-                    st.success(f"✅ {vip_nome} salvato come {vip_pos} ({vip_bonus:.2f}×)")
-                else:
-                    st.error("Errore salvataggio")
-            except Exception as e:
-                st.error(f"Errore: {e}")
-
-        st.markdown("#### Aggiungi giovane promessa")
-        vip_nome_y  = st.text_input("Nome giocatore", key="vip_youth_nome", placeholder="es. Camarda")
-        vip_anno    = st.number_input("Anno di nascita", 2000, 2010, 2004, 1, key="vip_anno")
-        vip_trend   = st.slider("Trend minutaggio", 0.5, 2.0, 1.3, 0.05, key="vip_trend",
-                                help="1.0=stabile, >1.0=crescente, <1.0=calante")
-        vip_note_y  = st.text_input("Note (opzionale)", key="vip_note_youth")
-        if st.button("💾 Salva giovane promessa"):
-            try:
-                from vip import add_youth_player
-                ok = add_youth_player(vip_nome_y, int(vip_anno), vip_trend, vip_note_y)
-                if ok:
-                    st.success(f"✅ {vip_nome_y} ({CURRENT_YEAR - int(vip_anno)} anni, trend {vip_trend:.2f}) salvato")
-                else:
-                    st.error("Errore salvataggio")
-            except Exception as e:
-                st.error(f"Errore: {e}")
-
-        # Riepilogo config attuale
-        st.markdown("---")
-        st.markdown("#### Config attuale")
-        try:
-            from vip import get_vip_config_summary
-            summary = get_vip_config_summary()
-            st.caption(
-                f"Versione: {summary['version']} · "
-                f"{summary['n_tactical']} override tattici · "
-                f"{summary['n_youth']} giovani promesse"
-            )
-        except Exception:
-            st.caption("Config non disponibile")
+        st.success("✨ **Motore VIP Completamente Automatico**")
+        st.markdown(
+            "Il VIP Radar ora scansiona l'intero database in totale autonomia. "
+            "L'algoritmo rileva da solo i giovani talenti U22 incrociando l'età con i trend di minutaggio, "
+            "e deduce la posizione tattica reale (es. *Quinto d'attacco* per i difensori goleador) "
+            "utilizzando l'inferenza statistica sui tassi di Gol e Assist P90.\n\n"
+            "Non c'è più bisogno di alcun inserimento manuale!"
+        )
 
 CURRENT_YEAR = 2026  # usato nel tab VIP
 
@@ -1274,6 +1245,73 @@ with tab_inj:
 
                 st.dataframe(inj_df.style.apply(color_row, axis=1), use_container_width=True)
                 st.caption("🔴 Rosso = infortuno grave  🟡 Giallo = stop breve/panchina  ⬜ Bianco = recupero/bonus")
+
+
+# ── Tab: Calendario e Portieri ────────────────────────────────────────────────
+with tab_cal:
+    st.subheader("📅 Analisi Calendario e Incroci Portieri")
+    st.markdown("Questa sezione analizza il calendario della Serie A per trovare la difficoltà delle prossime partite per ogni squadra e calcolare le migliori coppie di portieri da acquistare all'asta.")
+    
+    if data_df is None:
+        st.warning("Carica un file di quotazioni per vedere i dati.")
+    else:
+        from calendar_analyzer import fetch_calendar, get_all_teams_difficulty, find_best_gk_pairings
+        
+        with st.spinner("Scaricamento calendario in corso..."):
+            calendar = fetch_calendar()
+            
+        if not calendar:
+            st.error("Impossibile scaricare il calendario in questo momento.")
+        else:
+            col_cal1, col_cal2 = st.columns([1, 2])
+            
+            with col_cal1:
+                st.markdown("### 📊 Difficoltà Squadre")
+                num_matches = st.slider("Numero di prossime partite da analizzare:", min_value=1, max_value=38, value=38)
+                start_match = st.number_input("Partita di partenza (Giornata):", min_value=1, max_value=38, value=1)
+                
+                diffs = get_all_teams_difficulty(calendar, from_matchday=start_match, num_matches=num_matches)
+                diff_df = pd.DataFrame(list(diffs.items()), columns=["Squadra", "Difficoltà (1-5)"])
+                diff_df = diff_df.sort_values(by="Difficoltà (1-5)").reset_index(drop=True)
+                
+                def color_diff(val):
+                    if val <= 2.5: return 'background-color: #d4edda; color: black;' # verde
+                    if val >= 3.8: return 'background-color: #f8d7da; color: black;' # rosso
+                    return ''
+                    
+                st.dataframe(diff_df.style.map(color_diff, subset=['Difficoltà (1-5)']), use_container_width=True)
+                st.caption("Verde = Calendario Facile, Rosso = Calendario Difficile")
+                
+            with col_cal2:
+                st.markdown("### 🧤 Migliori Coppie Portieri")
+                gk_matches = st.slider("Analizza incroci per le prossime N giornate:", min_value=1, max_value=38, value=38)
+                
+                                # Trova colonna squadra
+                sq_col = next((c for c in data_df.columns if c.lower() in ('squadra', 'sq', 'team')), None)
+                squadre_presenti = data_df[sq_col].dropna().unique().tolist() if sq_col else []
+                
+                # Assicuriamoci che i nomi matchino
+                squadre_pulite = []
+                from calendar_analyzer import TEAM_STRENGTH
+                for sq in squadre_presenti:
+                    if sq in TEAM_STRENGTH:
+                        squadre_pulite.append(sq)
+                
+                if not squadre_pulite:
+                    squadre_pulite = list(TEAM_STRENGTH.keys())
+                    
+                pairings = find_best_gk_pairings(calendar, squadre_pulite, from_matchday=start_match, num_matches=gk_matches)
+                pair_df = pd.DataFrame(pairings)
+                pair_df = pair_df.rename(columns={
+                    "team1": "Portiere 1 (Squadra)",
+                    "team2": "Portiere 2 (Squadra)",
+                    "avg_difficulty": "Difficoltà Incrociata",
+                    "alternation_pct": "% Alternanza Casa/Trasferta"
+                })
+                
+                st.dataframe(pair_df.head(20), use_container_width=True)
+                st.caption("Mostra le migliori 20 coppie in base alla difficoltà della partita più facile in ogni giornata. Una % Alternanza alta indica che quasi sempre uno gioca in casa e l'altro in trasferta.")
+
 
 # ── Tab 6: Backtest IA ────────────────────────────────────────────────────────
 with tab_bt:
@@ -1447,5 +1485,5 @@ with tab_bt:
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.divider()
-if uploaded_file is not None:
-    st.info(f"✨ Dati caricati: **{uploaded_file.name}**")
+if fc_excel_file is not None:
+    st.info(f"✨ Dati caricati: **{fc_excel_file.name}**")

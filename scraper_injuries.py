@@ -101,16 +101,16 @@ def fetch_injury_updates(player_names: list[str]) -> dict[str, dict]:
     un dict {nome_giocatore: {tipo, modifier, duration_days, testo, timestamp}}.
     Mantiene l'evento più grave per ogni giocatore.
     """
-    url = "https://www.agentefantacalcio.it/feed/"
+    url = "https://news.google.com/rss/search?q=fantacalcio+infortunio+OR+squalifica&hl=it&gl=IT&ceid=IT:it"
     events: dict[str, dict] = {}
 
     try:
         resp = requests.get(url, headers=HEADERS, timeout=10)
         resp.raise_for_status()
-        soup = BeautifulSoup(resp.content, 'html.parser')
+        soup = BeautifulSoup(resp.content, 'xml')
         items = soup.find_all('item')
 
-        for item in items[:40]:
+        for item in items:
             title = item.find('title').get_text() if item.find('title') else ""
             desc = item.find('description').get_text() if item.find('description') else ""
             clean_desc = BeautifulSoup(desc, "html.parser").get_text().strip()

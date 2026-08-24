@@ -457,12 +457,10 @@ def _apply_strategy(df: pd.DataFrame, strategy: str) -> pd.DataFrame:
 
         fm_clean = sub['fanta_media'].fillna(prev) if 'fanta_media' in sub.columns else prev
 
-        if 'conserv' in s:
-            if 'fanta_media' not in df.columns or sub['fanta_media'].dropna().empty or sub['fanta_media'].dropna().std() < 0.2:
-                continue
-            df.loc[mask, 'score_selezione'] = 0.75 * fm_clean + 0.25 * prev
-
-        elif 'agg' in s and 'difesa' not in s:
+        if 'master' in s:
+            df.loc[mask, 'score_selezione'] = prev
+            
+        elif 'agg' in s:
             if ruolo == 'P':
                 continue
             gb  = gol_bonus_ruolo.get(ruolo, 3.0)
@@ -471,43 +469,33 @@ def _apply_strategy(df: pd.DataFrame, strategy: str) -> pd.DataFrame:
                    else fm_clean)
             df.loc[mask, 'score_selezione'] = 0.4 * prev + 0.6 * _rescale(off)
 
-        elif 'sco' in s or 'hype' in s:
+        elif 'money' in s:
             fm = (fm_clean.clip(lower=4.0)
                   if 'fanta_media' in df.columns and sub['fanta_media'].dropna().size > 5 and sub['fanta_media'].dropna().std() > 0.3
                   else prev)
             costo_clip = sub['costo_iniziale'].clip(lower=1)
-            # Rapporto lineare (non sqrt): penalizza molto i giocatori cari
             ratio = fm / costo_clip
-            # Bonus esplicito per i giocatori economici (vera "scommessa")
             costo_norm = (costo_clip / costo_clip.max()).clip(0.01, 1.0)
             ratio = ratio + (1.0 - costo_norm) * 0.3
             if 'upgrade_squadra' in df.columns:
                 ratio = ratio + sub['upgrade_squadra'].clip(0, 1) * (1.0 - costo_norm) * 0.5
-            # Peso prev basso (0.25): la ratio FM/costo guida la scelta
             df.loc[mask, 'score_selezione'] = 0.25 * prev + 0.75 * _rescale(ratio)
-
-        elif 'vip' in s:
-            df.loc[mask, 'score_selezione'] = prev
-
-        elif 'difesa' in s:
-            if ruolo in ('P', 'D'):
-                score_base = (0.80 * fm_clean + 0.20 * prev
-                              if 'fanta_media' in df.columns and sub['fanta_media'].dropna().size > 5 and sub['fanta_media'].dropna().std() > 0.2
-                              else prev)
-                if ruolo == 'P' and 'gk_defense_score' in df.columns:
-                    score_base = (score_base + sub['gk_defense_score'].clip(0, 3) * 0.4).clip(3.0, 14.0)
-                df.loc[mask, 'score_selezione'] = score_base
+            
+        elif 'sprint' in s:
+            # Il calendario è già stato applicato in apply_calendar_modifiers con peso x2
+            # Qui possiamo aggiungere ulteriore boost sulla forma recente (avvio bruciante)
+            if 'forma_recente_score' in df.columns:
+                forma_boost = sub['forma_recente_score'] * 0.50
+                df.loc[mask, 'score_selezione'] = prev + forma_boost
             else:
-                if 'fanta_media' in df.columns and sub['fanta_media'].dropna().size > 5 and sub['fanta_media'].dropna().std() > 0.2:
-                    df.loc[mask, 'score_selezione'] = 0.75 * fm_clean + 0.25 * prev
+                df.loc[mask, 'score_selezione'] = prev
 
     # Garantisce che score_selezione non contenga mai NaN
     df['score_selezione'] = df['score_selezione'].fillna(df['previsione_ia']).fillna(0.0)
 
     # ── Penalità presenze: penalizza i giocatori con storia di infortuni ────────
-    # Soglia per strategia: scommesse tollera più rischio, conservativa/difesa meno.
     if 'presenze' in df.columns and df['presenze'].median() > 5:
-        _soglie = {'scommesse': 10, 'hype': 10, 'agg': 14, 'vip': 14}
+        _soglie = {'moneyball': 10, 'agg': 12, 'sprint': 12, 'master': 16}
         soglia = next((v for k, v in _soglie.items() if k in s), 16)
         mask_low = df['presenze'] < soglia
         if mask_low.any():
@@ -518,17 +506,16 @@ def _apply_strategy(df: pd.DataFrame, strategy: str) -> pd.DataFrame:
             ).clip(3.0, 14.0)
 
     # ── Boost forma recente ────────────────────────────────────────────────────
-    if 'forma_recente_score' in df.columns and df['forma_recente_score'].abs().sum() > 0:
-        forma_weight = 0.25 if ('agg' in s or 'vip' in s) else 0.10 if 'difesa' in s else 0.15
+    if 'forma_recente_score' in df.columns and df['forma_recente_score'].abs().sum() > 0 and 'sprint' not in s:
+        forma_weight = 0.25 if ('agg' in s or 'money' in s) else 0.15
         df['score_selezione'] = (
             df['score_selezione'] + df['forma_recente_score'] * forma_weight
         ).clip(3.0, 14.0)
 
     # ── Boost VIP ─────────────────────────────────────────────────────────────
     if 'vip_total' in df.columns:
-        _vip_w = {'conserv': 0.20, 'agg': 0.40, 'sco': 0.55,
-                  'hype': 0.55, 'vip': 0.70, 'difesa': 0.30}
-        key        = next((k for k in _vip_w if k in s), 'conserv')
+        _vip_w = {'master': 0.30, 'agg': 0.40, 'sprint': 0.30, 'money': 0.80}
+        key        = next((k for k in _vip_w if k in s), 'master')
         vip_boost  = df['vip_total'].clip(MIN_VIP_PENALTY, MAX_VIP_BOOST) * _vip_w[key]
         df['score_selezione'] = (df['score_selezione'] * (1 + vip_boost)).clip(3.0, 14.0)
 
@@ -665,6 +652,12 @@ def train_prediction_model(
     except Exception as e:
         logger.warning(f"Applicazione news automatiche fallita: {e}")
 
+    try:
+        from calendar_analyzer import apply_calendar_modifiers
+        df = apply_calendar_modifiers(df, strategy=strategy)
+    except Exception as e:
+        logger.warning(f"Calendario non applicato: {e}")
+
     # Garantire che fanta_media contenga la stima se priva di storico nel listone di inizio stagione
     if 'fanta_media' not in df.columns or df['fanta_media'].isna().all():
         df['fanta_media'] = df['previsione_ia']
@@ -742,121 +735,112 @@ def build_compact_reason(row: pd.Series) -> str:
     elif inj > 1.05:
         parts.append(f"boost ×{inj:.2f}")
 
+    if 'calendar_diff' in row:
+        cal_diff = float(row.get('calendar_diff', 3.0))
+        if cal_diff < 2.7:
+            parts.append("calendario facile")
+        elif cal_diff > 3.3:
+            parts.append("calendario ostico")
+
     return " · ".join(parts)
 
 
 def build_player_explanation(row: pd.Series) -> str:
     """
     Spiegazione passo-passo di come l'IA ha stimato la FM per un giocatore.
-    Usata da /giocatore nel bot.
+    Genera un testo fluido tipo "Scout Report" basato sulle feature del modello.
     """
     ruolo = str(row.get('ruolo', 'C'))
     nome = str(row.get('nome', ''))
     costo = int(row.get('costo_iniziale', 0) or 0)
     prev = float(row.get('previsione_ia', 0) or 0)
-
-    sep = "─" * 32
-    lines = [f"🔍 *{nome}* [{ruolo}] — {costo} cr.", sep]
-
-    # 1. Base statistica stagione precedente
     fm_st = row.get('fanta_media')
+    
+    lines = [f"🔍 **Scout Report IA: {nome}** [{ruolo}] — Quotazione: {costo} cr.\n"]
+    
+    # 1. Base e Anagrafica
+    eta = float(row.get('eta', 26) or 26)
+    if eta <= 22:
+        stage = "è un prospetto in forte rampa di lancio"
+    elif eta <= 26:
+        stage = "è in fase di ascesa verso il prime fisico"
+    elif eta <= 29:
+        stage = "si trova nel pieno della maturità calcistica"
+    elif eta <= 32:
+        stage = "è un giocatore esperto ma con un lieve calo fisiologico atteso"
+    else:
+        stage = "è nella fase finale della carriera, con un minutaggio potenzialmente ridotto"
+        
+    intro = f"Il modello predittivo ha analizzato il profilo di {nome}. A {eta:.0f} anni, il giocatore {stage}."
     if fm_st and float(fm_st) > 0:
-        lines.append(f"📊 FM stagione prec.: *{float(fm_st):.2f}*")
+        intro += f" Parte da una fantamedia storica di {float(fm_st):.2f}."
+    lines.append(intro)
 
+    # 2. Analisi Statistica
     if ruolo == 'P':
         cs = float(row.get('clean_sheet_pg', 0) or 0)
         gs = float(row.get('gol_subiti_pg', 0) or 0)
         tit = float(row.get('titolarita_pct', 0.7) or 0.7)
-        lines.append(f"🛡 Clean sheet/g: {cs:.0%}  |  Gol subiti/g: {gs:.2f}")
-        lines.append(f"📋 Titolarità: {tit:.0%}")
+        stat_text = f"Tra i pali garantisce una titolarità del {tit:.0%}, con una media di {gs:.2f} gol subiti a partita e una probabilità di clean sheet del {cs:.0%}."
+        lines.append(stat_text)
     else:
         gol = float(row.get('gol_pg', 0) or 0)
         ast = float(row.get('assist_pg', 0) or 0)
-        xg = float(row.get('xg_pg', 0) or 0)
-        amm = float(row.get('ammonizioni_pg', 0) or 0)
         tit = float(row.get('titolarita_pct', 0.7) or 0.7)
-        pres = float(row.get('presenze', 0) or 0)
-        bonus = float(row.get('bonus_potential', 0) or 0)
-        lines.append(f"⚽ Gol/g: {gol:.2f}  |  Assist/g: {ast:.2f}  |  xG/g: {xg:.2f}")
-        lines.append(f"🟨 Amm/g: {amm:.2f}  |  Pot. bonus: {bonus:+.2f}")
-        lines.append(f"📋 Titolarità: {tit:.0%}  |  Presenze: {pres:.0f}")
+        if gol > 0.2 or ast > 0.15:
+            stat_text = f"Offensivamente i suoi numeri sono ottimi: produce {gol:.2f} gol e {ast:.2f} assist ogni 90 minuti."
+        elif gol > 0.05 or ast > 0.05:
+            stat_text = f"Il suo contributo offensivo è discreto ({gol:.2f} gol e {ast:.2f} assist a partita)."
+        else:
+            stat_text = f"Statisticamente non è un portatore di grandi bonus ({gol:.2f} gol a partita)."
+        lines.append(stat_text + f" La sua affidabilità in termini di presenze è stimata al {tit:.0%}.")
 
-    # 2. Età e curva di carriera
-    eta = float(row.get('eta', 26) or 26)
-    pf = float(row.get('prime_factor', 1.0) or 1.0)
-    if eta <= 22:
-        stage = "prospetto in forte crescita"
-    elif eta <= 26:
-        stage = "crescita verso il picco"
-    elif eta <= 29:
-        stage = "picco carriera"
-    elif eta <= 32:
-        stage = "maturità, lieve calo"
-    else:
-        stage = "fine carriera, calo atteso"
-    lines.append(f"🎂 Età: {eta:.0f} → {stage} (fattore fisico: {pf:.2f})")
-
-    # 3. Calciomercato e allenatore
+    # 3. Fattori Esterni (Mercato, Calendario, Infortuni, VIP)
+    factors = []
+    
     if int(row.get('cambio_squadra', 0) or 0) == 1:
         upgrade = float(row.get('upgrade_squadra', 0) or 0)
-        prestito = int(row.get('tipo_prestito', 0) or 0)
         coach_b = float(row.get('coach_bonus', 0) or 0)
-        coach_style = str(row.get('coach_style', '') or '')
-        tf_eff = float(row.get('transfer_effect', 0) or 0)
-
         if upgrade > 0:
-            move = f"trasferito in club di livello superiore (+{int(upgrade)} tier)"
+            factors.append("il trasferimento in una squadra di fascia superiore ne aumenta l'appetibilità")
         elif upgrade < 0:
-            move = f"trasferito in club di livello inferiore ({int(upgrade)} tier)"
-        else:
-            move = "cambio squadra (stesso livello)"
-        lines.append(f"🔄 Mercato: {move}")
-
-        style_desc = _COACH_STYLE_DESC.get(coach_style, '')
-        if style_desc:
-            lines.append(f"🧠 Sistema tattico: {style_desc}")
-
+            factors.append("il passaggio a una squadra di caratura inferiore potrebbe limitarne il potenziale")
         if coach_b > 0:
-            lines.append(f"   ✅ Bonus tattico per {ruolo}: +{coach_b:.2f} FM")
-        elif coach_b < 0:
-            lines.append(f"   ⚠️ Penalità tattica per {ruolo}: {coach_b:.2f} FM")
-
-        adapt_penalty = -0.10
-        lines.append(f"   ⚠️ Penalità adattamento (anno 1): {adapt_penalty:+.2f} FM")
-        if prestito:
-            lines.append("   ⚠️ In prestito: continuità incerta")
-        lines.append(f"   → Effetto netto mercato: {tf_eff:+.2f}")
-
-    # 4. Infortuni / stato fisico
-    inj_mod = float(row.get('injury_modifier', 1.0) or 1.0)
-    inj_type = str(row.get('injury_type', '') or '')
-    if abs(inj_mod - 1.0) >= 0.02:
-        tipo_label = _INJURY_TYPE_DESC.get(inj_type, inj_type or 'aggiornamento fisico')
-        sign = "🚑" if inj_mod < 1.0 else "💪"
-        lines.append(f"{sign} Stato: {tipo_label} → ×{inj_mod:.2f} sulla previsione")
-
-    # 5. Forma recente
+            factors.append("il sistema tattico del nuovo allenatore esalta particolarmente le sue caratteristiche")
+            
     forma = float(row.get('forma_recente_score', 0) or 0)
-    if abs(forma) >= 0.25:
-        trend = "sopra media" if forma > 0 else "sotto media"
-        lines.append(f"📈 Forma recente: {forma:+.2f} FM ({trend})")
-
-    # 6. Valore tattico VIP
+    if forma > 0.25:
+        factors.append("il trend di forma recente è decisamente positivo")
+    elif forma < -0.25:
+        factors.append("attualmente sta attraversando un periodo di scarsa forma")
+        
     vip = float(row.get('vip_total', 0) or 0)
-    if abs(vip) >= 0.05:
-        vip_label = "bonus tattico" if vip > 0 else "penalità tattica"
-        lines.append(f"⭐ VIP — {vip_label}: {vip:+.2f}")
+    if vip > 0.05:
+        factors.append("i parametri tattici avanzati (VIP) indicano un potenziale hidden bonus")
+        
+    if 'calendar_diff' in row:
+        cal_diff = float(row.get('calendar_diff', 3.0))
+        if cal_diff < 2.7:
+            factors.append("il calendario iniziale favorevole della sua squadra rappresenta un vantaggio")
+        elif cal_diff > 3.3:
+            factors.append("dovrà affrontare un calendario iniziale ostico che ne abbassa la proiezione")
+            
+    inj_mod = float(row.get('injury_modifier', 1.0) or 1.0)
+    if inj_mod < 0.95:
+        inj_type = str(row.get('injury_type', 'un problema fisico'))
+        tipo_label = _INJURY_TYPE_DESC.get(inj_type, inj_type)
+        factors.append(f"pesa negativamente la situazione medica attuale ({tipo_label})")
+        
+    if factors:
+        lines.append("A livello di contesto, l'algoritmo rileva che " + ", ".join(factors[:-1]) + (" e " if len(factors)>1 else "") + factors[-1] + ".")
 
-    # 7. Qualità di mercato
-    qm = float(row.get('qualita_mercato', 0) or 0)
-    lines.append(f"💰 Qualità di mercato: {qm:.0%} del top pool")
-
-    # 8. Modello usato
+    # 4. Conclusione
     temporal = bool(row.get('_temporal_model', False))
-    model_tag = "modello temporale (causale)" if temporal else "modello same-season"
-
-    lines.append(sep)
-    lines.append(f"🤖 Previsione IA: *{prev:.2f} FM*  _({model_tag})_")
+    model_tag = "Modello Causale Temporale" if temporal else "Modello Standard (Same-Season)"
+    
+    lines.append(f"\n🤖 **Sintesi e Previsione Finale**")
+    lines.append(f"Integrando tutti questi parametri matematici, il _{model_tag}_ ha ricalibrato il valore del giocatore, fissando la fantamedia attesa a **{prev:.2f}**.")
+    
     return "\n".join(lines)
 
 

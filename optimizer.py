@@ -52,42 +52,30 @@ RUOLI_VALIDI = set(ROSA.keys())
 #   Aggressiva P: min= 10cr, max= 45cr per 3 GK   → avg  3-15cr/GK
 
 BUDGET_BANDS: dict[str, dict[str, tuple[float, float]]] = {
-    # Con budget=500:
-    #   Aggressiva C: min=150cr, max=210cr per 8 medi → avg 19-26cr/medi
-    #   Aggressiva A: min=140cr, max=240cr per 6 att  → avg 23-40cr/att
-    #   (MID aumentato da 22-33% → 30-42% per forzare qualità in mediana)
+    'master': {
+        'P': (0.04, 0.11),
+        'D': (0.17, 0.26),
+        'C': (0.30, 0.40),
+        'A': (0.26, 0.44),
+    },
     'aggressiva': {
         'P': (0.02, 0.09),
         'D': (0.12, 0.20),
         'C': (0.30, 0.42),
         'A': (0.28, 0.48),
     },
-    'conservativa': {
-        'P': (0.04, 0.11),
-        'D': (0.17, 0.26),
-        'C': (0.30, 0.40),
-        'A': (0.26, 0.44),
-    },
-    'scommesse': {
-        'P': (0.02, 0.07),   # GK economico
-        'D': (0.08, 0.16),   # DEF cheap
-        'C': (0.23, 0.38),
-        'A': (0.24, 0.42),   # cap basso: no star da 60cr
-    },
-    # VIP pesante: stesse band dell'aggressiva, ma il VIP guida la scelta dei giocatori
-    'vip_pesante': {
-        'P': (0.02, 0.09),
+    'moneyball': {
+        'P': (0.02, 0.07),
         'D': (0.13, 0.21),
         'C': (0.28, 0.42),
         'A': (0.28, 0.48),
     },
-    # Difesa forte: GK e DEF premium, ATT di quantità con un top assoluto
-    'difesa_forte': {
-        'P': (0.06, 0.14),   # GK di qualità: 30-70 cr. su 500
-        'D': (0.20, 0.32),   # DEF solida: 100-160 cr.
-        'C': (0.26, 0.38),
-        'A': (0.22, 0.38),   # meno budget ATT
-    },
+    'sprint_calendario': {
+        'P': (0.04, 0.11),
+        'D': (0.15, 0.24),
+        'C': (0.28, 0.40),
+        'A': (0.28, 0.46),
+    }
 }
 
 # ── L4a: Slot ATT (percentile) ───────────────────────────────────────────────
@@ -289,8 +277,8 @@ def _build_and_solve(
     relax_level=2: band allargate 50%, tier slot ridotti di 2
     relax_level=3: solo composizione + budget totale + GK quality
     """
-    bands   = BUDGET_BANDS.get(strategy, BUDGET_BANDS['conservativa'])
-    min_avg = MIN_AVG_COST.get(strategy, MIN_AVG_COST['conservativa'])
+    bands   = BUDGET_BANDS.get(strategy, BUDGET_BANDS['master'])
+    min_avg = MIN_AVG_COST.get(strategy, MIN_AVG_COST.get('master', {}))
 
     # Fattori di rilassamento
     band_relax  = 1.0 + 0.25 * relax_level   # espande le band

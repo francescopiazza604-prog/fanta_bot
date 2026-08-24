@@ -22,7 +22,8 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 
 BASE_URL  = "https://www.fantacalcio.it"
-STATS_API = f"{BASE_URL}/api/v1/Excel/stats/20/1"   # 20 = Serie A, 1 = stagione corrente
+STATS_API = f"{BASE_URL}/api/v1/Excel/stats/21/1"   # 21 = Serie A
+PRICES_API = f"{BASE_URL}/api/v1/Excel/prices/21/1"
 LOGIN_URL = f"{BASE_URL}/login"
 
 BASE_DIR   = os.path.dirname(os.path.abspath(__file__))
@@ -286,9 +287,13 @@ def _login(email: str, password: str) -> requests.Session | None:
 
 
 def _download_excel(session: requests.Session) -> pd.DataFrame | None:
-    """Scarica il file Excel statistiche dall'API autenticata."""
+    """Scarica il file Excel statistiche dall'API autenticata, fallback su Prices."""
     try:
         resp = session.get(STATS_API, headers=HEADERS, timeout=30)
+        if resp.status_code == 401 or resp.status_code == 403:
+            logger.info("Account non Premium, fallback al file Quotazioni base.")
+            resp = session.get(PRICES_API, headers=HEADERS, timeout=30)
+            
         if resp.status_code == 200:
             content_type = resp.headers.get("Content-Type", "")
             if "excel" in content_type or "spreadsheet" in content_type or len(resp.content) > 1000:
