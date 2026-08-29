@@ -56,6 +56,8 @@ def import_real_quotazioni(file_path):
     ALIASES_GOL = {'g', 'gol', 'gol_segnati', 'reti', 'g.s.'}
     ALIASES_ASSIST = {'a', 'assist', 'ass'}
 
+    ALIASES_SQUADRA = {'squadra', 'team', 'sq'}
+
     try:
         if file_path.endswith('.xlsx'):
             df_raw = pd.read_excel(file_path, header=None)
@@ -109,13 +111,15 @@ def import_real_quotazioni(file_path):
                 rename_map[col] = 'gol'
             elif col_low in ALIASES_ASSIST and 'assist' not in rename_map.values():
                 rename_map[col] = 'assist'
+            elif col_low in ALIASES_SQUADRA and 'squadra' not in rename_map.values():
+                rename_map[col] = 'squadra'
 
         df = df.rename(columns=rename_map)
 
         # Fallbacks per contenuto
         if 'ruolo' not in df.columns:
             for col in df.columns:
-                if col in ('nome', 'costo_iniziale', 'fanta_media', 'fvm'):
+                if col in ('nome', 'costo_iniziale', 'fanta_media', 'fvm', 'squadra'):
                     continue
                 unique_vals = set(df[col].dropna().astype(str).str.upper().unique())
                 if unique_vals.issubset(RUOLI_VALIDI | {'nan', ''}) and len(unique_vals & RUOLI_VALIDI) >= 2:
@@ -124,7 +128,7 @@ def import_real_quotazioni(file_path):
 
         if 'nome' not in df.columns:
             for col in df.columns:
-                if col in ('ruolo', 'costo_iniziale', 'fanta_media', 'fvm'):
+                if col in ('ruolo', 'costo_iniziale', 'fanta_media', 'fvm', 'squadra'):
                     continue
                 serie = df[col].astype(str)
                 numeric_ratio = pd.to_numeric(serie, errors='coerce').notna().mean()
@@ -172,7 +176,7 @@ def import_real_quotazioni(file_path):
             return None
 
         # Ritorna tutte le colonne rilevanti presenti
-        keep_cols = [c for c in ['ruolo', 'nome', 'costo_iniziale', 'fanta_media', 'fvm', 'media_voto', 'presenze', 'gol_pg', 'assist_pg', 'titolarita_pct'] if c in df.columns]
+        keep_cols = [c for c in ['ruolo', 'nome', 'squadra', 'costo_iniziale', 'fanta_media', 'fvm', 'media_voto', 'presenze', 'gol_pg', 'assist_pg', 'titolarita_pct'] if c in df.columns]
         return df[keep_cols].copy()
 
     except Exception as e:

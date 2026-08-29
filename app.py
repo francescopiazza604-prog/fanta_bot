@@ -679,6 +679,17 @@ with st.sidebar.expander("Aggiorna Trasferimenti"):
 
 cached_tm = load_cached_transfers()
 tm_cache_path = os.path.join(DATA_DIR, "transfers_cache.csv")
+
+TRANSFERS_STALE_HOURS = 12
+if _cache_is_stale(tm_cache_path, TRANSFERS_STALE_HOURS):
+    with st.sidebar.status("🔄 Aggiornamento automatico trasferimenti...") as s:
+        try:
+            ok, msg_txt = fetch_and_save_transfers(int(season_year))
+            s.update(label=f"✅ Trasferimenti aggiornati" if ok else f"⚠️ {msg_txt}", state="complete" if ok else "error")
+            cached_tm = load_cached_transfers()
+        except Exception as e:
+            s.update(label=f"❌ Errore trasferimenti: {e}", state="error")
+
 st.sidebar.caption(
     f"Trasferimenti: {len(cached_tm)} in cache — {_cache_age_str(tm_cache_path)}"
     if cached_tm is not None else "Trasferimenti: nessuna cache"
@@ -1290,17 +1301,36 @@ with tab_cal:
                 sq_col = next((c for c in data_df.columns if c.lower() in ('squadra', 'sq', 'team')), None)
                 squadre_presenti = data_df[sq_col].dropna().unique().tolist() if sq_col else []
                 
-                # Assicuriamoci che i nomi matchino
-                squadre_pulite = []
                 from calendar_analyzer import TEAM_STRENGTH
-                for sq in squadre_presenti:
-                    if sq in TEAM_STRENGTH:
-                        squadre_pulite.append(sq)
-                
-                if not squadre_pulite:
-                    squadre_pulite = list(TEAM_STRENGTH.keys())
+                squadre_pulite = list(TEAM_STRENGTH.keys())
                     
                 pairings = find_best_gk_pairings(calendar, squadre_pulite, from_matchday=start_match, num_matches=gk_matches)
+                
+                # Sostituisci il nome della squadra con il nome del portiere titolare
+                team_to_gks = {}
+                ruolo_col = next((c for c in data_df.columns if c.lower() in ('ruolo', 'r', 'role')), None)
+                nome_col = next((c for c in data_df.columns if c.lower() in ('nome', 'giocatore', 'player', 'n')), None)
+                
+                if sq_col and ruolo_col and nome_col:
+                    # Usa i dati aggiornati caricati dall'utente per la stagione corrente
+                    for sq in squadre_pulite:
+                        gks = data_df[(data_df[sq_col].astype(str).str.strip().str.upper() == sq.strip().upper()) & (data_df[ruolo_col].astype(str).str.strip().str.upper().str.startswith("P"))]
+                        if not gks.empty:
+                            sort_col = "costo_iniziale" if "costo_iniziale" in data_df.columns else "fanta_media" if "fanta_media" in data_df.columns else None
+                            if sort_col:
+                                gks = gks.sort_values(by=sort_col, ascending=False)
+                            top_gk = gks.iloc[0][nome_col]
+                            team_to_gks[sq] = f"{top_gk} ({sq})"
+                        else:
+                            team_to_gks[sq] = sq
+                else:
+                    for sq in squadre_pulite:
+                        team_to_gks[sq] = sq
+                
+                for p in pairings:
+                    p["team1"] = team_to_gks.get(p["team1"], p["team1"])
+                    p["team2"] = team_to_gks.get(p["team2"], p["team2"])
+
                 pair_df = pd.DataFrame(pairings)
                 pair_df = pair_df.rename(columns={
                     "team1": "Portiere 1 (Squadra)",
