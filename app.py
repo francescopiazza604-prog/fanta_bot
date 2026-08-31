@@ -549,9 +549,19 @@ header[data-testid="stHeader"] {
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("""
+import base64
+
+avatar_path = os.path.join(BASE_DIR, "francy_avatar.jpeg")
+if os.path.exists(avatar_path):
+    with open(avatar_path, "rb") as f:
+        encoded = base64.b64encode(f.read()).decode()
+    avatar_html = f'<img src="data:image/jpeg;base64,{encoded}" style="width: 90px; height: 90px; border-radius: 50%; vertical-align: middle; margin-bottom: 8px; margin-right: 15px; border: 2px solid #5a32fa; box-shadow: 0 0 10px rgba(90, 50, 250, 0.5); object-fit: cover;">'
+else:
+    avatar_html = "🤖"
+
+st.markdown(f"""
 <div class="hero-header">
-    <div class="hero-title">🤖 FantaBot AI 2026/27 — Market Master</div>
+    <div class="hero-title">{avatar_html} FantaBot AI 2026/27 — Market Master</div>
     <div class="hero-subtitle">Agente AI per Fantacalcio: Previsioni Avanzate, Modello Tattico, Rigoristi e Copilota d'Asta Live in Tempo Reale.</div>
     <div class="hero-badge-container">
         <span class="hero-badge hero-badge-green">● AI Engine 2026/27 Attivo</span>
@@ -588,74 +598,111 @@ strategy_label = st.sidebar.selectbox(
 )
 strategy = _strategy_key(strategy_label)
 
-# ── Stats Fantacalcio.it ──────────────────────────────────────────────────────
-st.sidebar.subheader("📡 Stats Fantacalcio.it")
-
+# ── 1. DATI DEL NUOVO CAMPIONATO ──────────────────────────────────────────────────────
+st.sidebar.subheader("1️⃣ Listone e Forma Attuale")
 _fc_cache_path = os.path.join(DATA_DIR, "fantacalcio_stats_cache.csv")
 
-# Opzione A: login automatico con credenziali
-
-with st.sidebar.expander("📥 CARICA LISTONE FANTACALCIO", expanded=True):
-    st.caption(
-        "**Devi caricare SOLO il file delle QUOTAZIONI della nuova stagione!**\n\n"
-        "Non ti serve scaricare le 'Statistiche' della scorsa stagione, perché "
-        "l'Intelligenza Artificiale recupererà da sola i voti, i gol e gli infortuni "
-        "dal web incrociandoli in automatico con il tuo listone nuovo."
-    )
+with st.sidebar.expander("📥 LISTONE E VOTI REALI", expanded=True):
+    st.caption("**1. Carica il file Listone Quotazioni (Excel/CSV)**")
     fc_excel_file = st.file_uploader(
-        "Seleziona il file (Excel o CSV)", type=["xlsx", "xls", "csv"], key="fc_excel_upload"
+        "File Quotazioni", type=["xlsx", "xls", "csv"], key="fc_excel_upload"
     )
-    if fc_excel_file is not None:
-        file_id = fc_excel_file.name + str(fc_excel_file.size)
-        if st.session_state.get("last_uploaded_file") != file_id:
-            with st.sidebar.status("Importazione Listone...") as s:
+    
+    st.caption("**2. Incolla i Voti (Prime giornate)** se il campionato è iniziato")
+    fc_stats_text = st.text_area("Copia-incolla la tabella voti", height=100)
+    
+    if st.button("💾 Unisci e Salva"):
+        if fc_excel_file is not None:
+            with st.sidebar.status("Importazione in corso...") as s:
                 try:
                     from importer import import_real_quotazioni
                     import tempfile
                     import os
+                    import pandas as pd
+                    import numpy as np
+                    
+                    dfs = []
+                    
+                    # 1. Excel (Quotazioni)
                     ext = os.path.splitext(fc_excel_file.name)[1]
                     with tempfile.NamedTemporaryFile(suffix=ext, delete=False) as f_tmp:
                         f_tmp.write(fc_excel_file.getvalue())
                         tmp_name = f_tmp.name
-                    
-                    new_df = import_real_quotazioni(tmp_name)
-                    if new_df is not None and not new_df.empty:
+                    df_q = import_real_quotazioni(tmp_name)
+                    if df_q is not None and not df_q.empty:
+                        dfs.append(df_q)
+                        
+                    # 2. Testo (Statistiche / Voti)
+                    if fc_stats_text.strip():
+                        with tempfile.NamedTemporaryFile(suffix=".txt", delete=False, mode="w", encoding="utf-8") as f_tmp:
+                            f_tmp.write(fc_stats_text)
+                            tmp_name2 = f_tmp.name
+                        df_s = import_real_quotazioni(tmp_name2)
+                        if df_s is not None and not df_s.empty:
+                            dfs.append(df_s)
+                            
+                    if dfs:
+                        dfs_indexed = [d.set_index('nome') for d in dfs]
+                        final_df = dfs_indexed[0]
+                        for other_df in dfs_indexed[1:]:
+                            if 'costo_iniziale' in final_df:
+                                final_df['costo_iniziale'] = final_df['costo_iniziale'].replace(1, np.nan)
+                            if 'costo_iniziale' in other_df:
+                                other_df['costo_iniziale'] = other_df['costo_iniziale'].replace(1, np.nan)
+                            final_df = final_df.combine_first(other_df)
+                        
+                        if 'costo_iniziale' in final_df:
+                            final_df['costo_iniziale'] = final_df['costo_iniziale'].fillna(1)
+                            
+                        new_df = final_df.reset_index()
                         QUOTAZIONI_PATH = os.path.join(DATA_DIR, "quotazioni_correnti.csv")
                         new_df.to_csv(QUOTAZIONI_PATH, index=False)
-                        st.session_state["last_uploaded_file"] = file_id
+                        st.session_state["last_uploaded_file"] = fc_excel_file.name
                         _get_cached_predictions.clear()
-                        s.update(label=f"✅ {len(new_df)} giocatori caricati!", state="complete", expanded=False)
+                        s.update(label=f"✅ {len(new_df)} giocatori uniti con successo!", state="complete", expanded=False)
                     else:
-                        s.update(label="❌ Formato file non riconosciuto", state="error", expanded=False)
+                        s.update(label="❌ Nessun dato valido", state="error", expanded=False)
                 except Exception as e:
-                    s.update(label=f"❌ {e}", state="error")
+                    s.update(label=f"❌ Errore: {e}", state="error")
+        else:
+            st.error("Devi prima caricare il file Excel delle Quotazioni!")
 
-cached_stats = load_cached_stats()
-if cached_stats is not None:
-    st.sidebar.caption(
-        f"Stats: {len(cached_stats)} giocatori — aggiornato {_cache_age_str(_fc_cache_path)}"
-    )
-else:
-    st.sidebar.caption("⚠️ Stats: nessuna cache — usa login auto o carica l'Excel manualmente")
-
-# ── Dati FBref (Statistiche Storiche) ─────────────────────────────────────────
-st.sidebar.subheader("📈 Statistiche Avanzate (FBref)")
-with st.sidebar.expander("Importa Statistiche FBref (Opzionale)"):
+# ── 2. DATI STORICI FBREF (IL CERVELLO IA) ─────────────────────────────────────────
+st.sidebar.subheader("2️⃣ Dati Storici (Motore IA)")
+with st.sidebar.expander("📈 Incolla Statistiche FBRef", expanded=True):
     st.caption(
-        "Essendo bloccato da Cloudflare, devi incollare i dati FBref manualmente per far "
-        "imparare all'IA i dati della scorsa stagione:\n"
-        "1. Apri [fbref.com/it/comps/11/stats/Serie-A-Stats](https://fbref.com/it/comps/11/stats/Serie-A-Stats)\n"
+        "**Recupera le statistiche tattiche della SCORSA stagione (es. 25/26).**\n\n"
+        "*(FBRef blocca l'accesso automatico con Cloudflare, devi copiarle tu)*\n\n"
+        "1. Apri [FBRef Serie A (Stagione Scorsa)](https://fbref.com/it/comps/11/history/Serie-A-Seasons)\n"
         "2. Scorri fino alla tabella 'Standard Stats'\n"
         "3. Clicca 'Share & Export' → 'Get table as CSV'\n"
         "4. Incolla il testo qui sotto:"
     )
     fbref_csv_text = st.text_area("Incolla CSV FBref", height=100)
-    if st.button("💾 Salva FBref Cache"):
+    if st.button("💾 Salva Dati Storici"):
         if fbref_csv_text.strip():
-            with open(os.path.join(DATA_DIR, "fbref_stats_cache.csv"), "w", encoding="utf-8") as fb:
-                fb.write(fbref_csv_text)
-            _get_cached_predictions.clear()
-            st.success("✅ Statistiche FBref salvate con successo!")
+            try:
+                import pandas as pd
+                import io
+                from scraper_stats import _normalize_fbref_df
+                
+                # Il CSV esportato da FBRef ha una doppia riga di intestazione.
+                # Se "Player" è nella seconda riga, usiamo header=1.
+                lines = fbref_csv_text.strip().split('\n')
+                if len(lines) > 1 and "Player" in lines[1] and "Player" not in lines[0]:
+                    df_raw = pd.read_csv(io.StringIO(fbref_csv_text), header=1)
+                else:
+                    df_raw = pd.read_csv(io.StringIO(fbref_csv_text))
+                    
+                df_norm = _normalize_fbref_df(df_raw)
+                if df_norm is not None and not df_norm.empty:
+                    df_norm.to_csv(os.path.join(DATA_DIR, "fbref_stats_cache.csv"), index=False)
+                    _get_cached_predictions.clear()
+                    st.success(f"✅ Dati Storici tradotti e salvati ({len(df_norm)} giocatori)!")
+                else:
+                    st.error("❌ Errore nella traduzione del CSV. Assicurati di aver copiato la tabella 'Standard Stats'.")
+            except Exception as e:
+                st.error(f"❌ Errore di formattazione: {e}")
         else:
             st.error("Incolla il testo prima di salvare.")
 
@@ -916,7 +963,15 @@ with tab_copilot:
         
     state: AuctionState = st.session_state.auction_state
     
-    # Metriche di riepilogo
+    with st.expander("⚙️ Impostazioni Avversari (Opzionale)"):
+        opps_str = st.text_input("Nomi Avversari (separati da virgola)", value=", ".join([t for t in state.teams if t != state.my_team_name]))
+        if st.button("💾 Salva Nomi Avversari e Resetta"):
+            opp_list = [o.strip() for o in opps_str.split(",") if o.strip()]
+            st.session_state.auction_state = AuctionState(total_budget=budget, opponents=opp_list)
+            st.rerun()
+
+    # Metriche di riepilogo MIO TEAM
+    st.markdown("### Il Mio Team")
     c_st1, c_st2, c_st3, c_st4 = st.columns(4)
     with c_st1:
         st.metric("💰 Budget Rimasto", f"{state.remaining_budget} / {budget} cr")
@@ -925,9 +980,9 @@ with tab_copilot:
     with c_st3:
         st.metric("⚽ Reparti", f"P:{state.role_counts['P']}/3 D:{state.role_counts['D']}/8 C:{state.role_counts['C']}/8 A:{state.role_counts['A']}/6")
     with c_st4:
-        if st.button("🔄 Resetta Asta"):
-            st.session_state.auction_state = AuctionState(total_budget=budget)
-            st.rerun()
+        heat = state.get_market_heat()
+        heat_label = "🔥 Inflazione" if heat > 1.05 else ("❄️ Deflazione" if heat < 0.95 else "⚖️ Equilibrato")
+        st.metric("Market Heat", f"{heat:.2f}x", delta=heat_label, delta_color="inverse" if heat > 1.05 else "normal")
 
     st.markdown("---")
 
@@ -940,6 +995,15 @@ with tab_copilot:
             df_cop = data_df.copy()
             
         df_cop = apply_real_market_logic(df_cop)
+        
+        # Integriamo CUI se il dataset ne è sprovvisto, o ricalcoliamolo al volo se serve
+        if 'cui' not in df_cop.columns:
+            try:
+                from chaos_optimizer import compute_chaos_upside_index
+                df_cop = compute_chaos_upside_index(df_cop)
+            except Exception:
+                pass
+                
         bids_df = calculate_copilot_bids(df_cop, state, num_partecipanti)
         
         with st.expander("➕ Registra Giocatore Chiamato all'Asta", expanded=True):
@@ -948,7 +1012,8 @@ with tab_copilot:
                 unassigned_names = bids_df['nome'].tolist()
                 player_sel = st.selectbox("Giocatore", unassigned_names)
             with c_b2:
-                buyer = st.selectbox("Acquirente", ["ME", "RIVALE"])
+                # Mostra tutti i team disponibili nel menu a tendina
+                buyer = st.selectbox("Acquirente", list(state.teams.keys()))
             with c_b3:
                 price_paid = st.number_input("Prezzo d'Asta (cr)", min_value=1, max_value=budget, value=1)
             with c_b4:
@@ -958,7 +1023,7 @@ with tab_copilot:
                     p_info = bids_df[bids_df['nome'] == player_sel].iloc[0].to_dict()
                     state.buy_player(p_info, price=int(price_paid), buyer=buyer)
                     st.success(f"Registrato {player_sel} a {price_paid} cr ({buyer})")
-                    if buyer == "RIVALE":
+                    if buyer != state.my_team_name:
                         st.session_state.last_rival_buy = p_info
                     else:
                         st.session_state.last_rival_buy = None
@@ -972,15 +1037,15 @@ with tab_copilot:
             l_ruolo = last_rival_buy.get('ruolo', 'C')
             l_nome = last_rival_buy.get('nome', '')
             
-            # Cerca la migliore alternativa rimasta nello stesso ruolo
+            # Cerca la migliore alternativa rimasta nello stesso ruolo per ME
             alt_df = bids_df[bids_df['ruolo'] == l_ruolo].sort_values('var_score', ascending=False)
             if not alt_df.empty:
                 top_alt = alt_df.iloc[0]
                 st.info(
-                    f"🎯 **REAZIONE IA:** Un rivale ha appena preso **{l_nome}** ({l_ruolo}). "
+                    f"🎯 **REAZIONE IA:** Un avversario ha appena preso **{l_nome}** ({l_ruolo}). "
                     f"Il miglior bersaglio tattico ancora libero per questo reparto è "
-                    f"**{top_alt['nome']}** (FM Prevista: {top_alt['previsione_ia']:.2f}). "
-                    f"Tieniti pronto a chiamarlo, ma non superare i **{int(top_alt['max_bid'])} crediti**!",
+                    f"**{top_alt['nome']}** (FM Prevista: {top_alt.get('previsione_ia', 6.0):.2f}). "
+                    f"Tieniti pronto a chiamarlo, non superare i **{int(top_alt['max_bid'])} crediti**!",
                     icon="⚡"
                 )
 
@@ -998,20 +1063,91 @@ with tab_copilot:
 
         disp_cols = [c for c in [
             "nome", "ruolo", "squadra", "costo_iniziale",
-            "previsione_ia", "var_score", "target_bid", "max_bid", "bonus_rigorista"
+            "previsione_ia", "var_score", "target_bid", "max_bid", "cui", "cui_label", "bonus_rigorista"
         ] if c in bids_filtered.columns]
+        
+        col_renames = {
+            "costo_iniziale": "Listone cr",
+            "previsione_ia": "FM Prevista",
+            "var_score": "VAR",
+            "target_bid": "Target Bid (cr)",
+            "max_bid": "MAX BID CONSIGLIATO (cr)",
+            "cui": "Chaos Index",
+            "cui_label": "Profilo (CUI)",
+            "bonus_rigorista": "Rigore Bonus"
+        }
+        
+        df_view = bids_filtered[disp_cols].rename(columns=col_renames).head(100)
+        
+        # Funzioni di stile per Pandas
+        def highlight_roles(val):
+            colors = {
+                'P': 'background-color: #f39c12; color: #1a1a1a; font-weight: 800; text-align: center;',
+                'D': 'background-color: #27ae60; color: #ffffff; font-weight: 800; text-align: center;',
+                'C': 'background-color: #2980b9; color: #ffffff; font-weight: 800; text-align: center;',
+                'A': 'background-color: #c0392b; color: #ffffff; font-weight: 800; text-align: center;'
+            }
+            return colors.get(str(val).upper(), '')
+
+        def highlight_cui(val):
+            val_str = str(val)
+            if 'Boom' in val_str: return 'color: #e74c3c; font-weight:bold;'
+            if 'Costante' in val_str: return 'color: #2ecc71; font-weight:bold;'
+            if 'Azzardo' in val_str: return 'color: #f39c12; font-style: italic;'
+            if 'Flop' in val_str: return 'color: #95a5a6;'
+            return ''
+            
+        styled_df = df_view.style
+        if 'ruolo' in df_view.columns:
+            styled_df = styled_df.map(highlight_roles, subset=['ruolo'])
+        if 'Profilo (CUI)' in df_view.columns:
+            styled_df = styled_df.map(highlight_cui, subset=['Profilo (CUI)'])
+            
+        if 'FM Prevista' in df_view.columns:
+            styled_df = styled_df.background_gradient(cmap='YlGn', subset=['FM Prevista'])
+        if 'MAX BID CONSIGLIATO (cr)' in df_view.columns:
+            styled_df = styled_df.background_gradient(cmap='OrRd', subset=['MAX BID CONSIGLIATO (cr)'])
+
+        format_dict = {}
+        if 'FM Prevista' in df_view.columns: format_dict['FM Prevista'] = "{:.2f}"
+        if 'VAR' in df_view.columns: format_dict['VAR'] = "+{:.2f}"
+        if 'Chaos Index' in df_view.columns: format_dict['Chaos Index'] = "{:.2f}"
+        if 'Listone cr' in df_view.columns: format_dict['Listone cr'] = "{:.0f}"
+        if 'Target Bid (cr)' in df_view.columns: format_dict['Target Bid (cr)'] = "{:.0f}"
+        if 'MAX BID CONSIGLIATO (cr)' in df_view.columns: format_dict['MAX BID CONSIGLIATO (cr)'] = "{:.0f}"
+        
+        styled_df = styled_df.format(format_dict)
+
         st.dataframe(
-            bids_filtered[disp_cols].rename(columns={
-                "costo_iniziale": "Listone cr",
-                "previsione_ia": "FM Prevista",
-                "var_score": "VAR Marginalità",
-                "target_bid": "Target Bid (cr)",
-                "max_bid": "MAX BID CONSIGLIATO (cr)",
-                "bonus_rigorista": "Rigore Bonus"
-            }).head(100),
-            use_container_width=True
+            styled_df,
+            use_container_width=True,
+            height=500
         )
         
+        with st.expander("📊 Situazione Avversari", expanded=False):
+            opps_data = []
+            for t_name, t_data in state.teams.items():
+                if t_name == state.my_team_name: continue
+                roster_len = len(t_data['roster'])
+                rc = t_data['role_counts']
+                rs = t_data['role_spent']
+                
+                # Deduce focus
+                focus = "Bilanciato"
+                if rs['A'] > t_data['budget'] * 0.45 or rc['A'] >= 4: focus = "Attacco Pesante"
+                elif rc['D'] >= 5: focus = "Difesa Completa"
+                elif t_data['budget'] > sum(other['budget'] for other in state.teams.values()) / max(1, len(state.teams)): focus = "Accumulatore"
+
+                opps_data.append({
+                    "Avversario": t_name,
+                    "Budget Rimasto": t_data['budget'],
+                    "Slot Coperti": f"{roster_len}/25",
+                    "Reparti": f"P:{rc['P']} D:{rc['D']} C:{rc['C']} A:{rc['A']}",
+                    "Strategia Dedotta": focus
+                })
+            if opps_data:
+                st.table(pd.DataFrame(opps_data))
+
         if state.my_roster:
             st.subheader("📋 La Mia Rosa Acquistata")
             st.dataframe(pd.DataFrame(state.my_roster), use_container_width=True)
@@ -1516,4 +1652,5 @@ with tab_bt:
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.divider()
 if fc_excel_file is not None:
+    # removed
     st.info(f"✨ Dati caricati: **{fc_excel_file.name}**")

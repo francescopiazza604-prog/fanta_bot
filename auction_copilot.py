@@ -2,10 +2,10 @@
 auction_copilot.py — Assistente Asta Live in Tempo Reale.
 
 Gestisce la dinamica dell'Asta del Fantacalcio in diretta:
-1. Calcolo del Target Price & Prezzo Massimo Consigliato (Max Bid) per ogni giocatore svincolato.
-2. Ricalcolo dinamico del budget residuo ad ogni acquisto proprio o dei rivali.
-3. Strategia di allocazione crediti salvati da rilanci mancati.
-4. Tracciamento rosa e saturezione ruoli.
+1. Tracciamento Avversari: budget, slot rimanenti, focus (Strategia).
+2. Inflazione Mercato: calcola quanti crediti "girano" rispetto ai posti vuoti.
+3. Scarsità: se sei l'unico a cui manca un portiere, il max_bid crolla a 1.
+4. Durability Dinamica: usa i dati storici (es. presenze) al posto di liste fisse.
 """
 
 import json
@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 ROSA_TARGET = {'P': 3, 'D': 8, 'C': 8, 'A': 6}
 
-# Budget indicativo per reparto base
 def get_role_allocation(num_partecipanti: int = 8) -> dict:
     if num_partecipanti <= 8:
         return {'P': 0.05, 'D': 0.16, 'C': 0.32, 'A': 0.47}
@@ -27,79 +26,117 @@ def get_role_allocation(num_partecipanti: int = 8) -> dict:
     else:  # 12+
         return {'P': 0.11, 'D': 0.24, 'C': 0.25, 'A': 0.40}
 
-# Indice di Integrità Fisica (Durability Index)
-# Giocatori storicamente fragili (saltano molte partite ogni stagione)
-# Il moltiplicatore taglia matematicamente il MAX BID (es. 0.65 taglia il tetto asta del 35%)
-INJURY_PRONE_PLAYERS = {
-    "dybala": 0.65,
-    "berardi": 0.40,
-    "milik": 0.55,
-    "sensi": 0.30,
-    "castrovilli": 0.50,
-    "nico gonzalez": 0.75,
-    "zapata": 0.75,
-    "chiesa": 0.80,
-    "spinazzola": 0.65,
-    "pellegrini lo.": 0.85,
-    "kalulu": 0.75,
-    "bennacer": 0.70,
-    "maignan": 0.85,
-    "kvaratskhelia": 0.90,  # occasionali stop
-}
-
-
 class AuctionState:
     """Rappresenta lo stato in tempo reale dell'Asta Fantacalcio."""
 
-    def __init__(self, total_budget: int = 500, my_team_name: str = "La Mia Squadra"):
+    def __init__(self, total_budget: int = 500, my_team_name: str = "ME", opponents: list[str] = None):
         self.total_budget = total_budget
-        self.remaining_budget = total_budget
         self.my_team_name = my_team_name
-        self.my_roster = []      # Lista di dict dei giocatori comprati
-        self.sold_players = {}   # dict: nome_giocatore -> {squadra_fanta, prezzo}
-        self.role_counts = {'P': 0, 'D': 0, 'C': 0, 'A': 0}
-        self.role_spent = {'P': 0, 'D': 0, 'C': 0, 'A': 0}
+        
+        # Inizializza tutte le squadre (ME + avversari)
+        self.teams = {}
+        self.teams[my_team_name] = self._empty_team_state(total_budget)
+        
+        if opponents is None:
+            opponents = [f"RIVALE {i}" for i in range(1, 8)]
+            
+        for opp in opponents:
+            if opp.strip() and opp != my_team_name:
+                self.teams[opp] = self._empty_team_state(total_budget)
+                
+        self.sold_players = {}   # dict: nome_giocatore -> {buyer, price, ruolo}
+        
+    def _empty_team_state(self, budget: int) -> dict:
+        return {
+            'budget': budget,
+            'roster': [],
+            'role_counts': {'P': 0, 'D': 0, 'C': 0, 'A': 0},
+            'role_spent': {'P': 0, 'D': 0, 'C': 0, 'A': 0}
+        }
+
+    @property
+    def remaining_budget(self) -> int:
+        return self.teams[self.my_team_name]['budget']
+        
+    @property
+    def my_roster(self) -> list:
+        return self.teams[self.my_team_name]['roster']
+
+    @property
+    def role_counts(self) -> dict:
+        return self.teams[self.my_team_name]['role_counts']
+
+    @property
+    def role_spent(self) -> dict:
+        return self.teams[self.my_team_name]['role_spent']
 
     def buy_player(self, player_dict: dict, price: int, buyer: str = "ME"):
-        """Registra l'acquisto di un giocatore da parte mia o di un concorrente."""
+        """Registra l'acquisto di un giocatore per uno specifico fantallenatore."""
         nome = player_dict['nome']
         ruolo = player_dict['ruolo']
         
-        self.sold_players[nome] = {'buyer': buyer, 'price': price, 'ruolo': ruolo}
+        # Mappa "ME" nel nome effettivo
+        if buyer.upper() in ["ME", "MY_TEAM"] or buyer == self.my_team_name:
+            buyer_key = self.my_team_name
+        else:
+            buyer_key = buyer if buyer in self.teams else list(self.teams.keys())[1] # fallback
 
-        if buyer.upper() in ["ME", "MY_TEAM", self.my_team_name.upper()]:
-            self.my_roster.append({**player_dict, 'prezzo_acquisto': price})
-            self.remaining_budget -= price
-            self.role_counts[ruolo] = self.role_counts.get(ruolo, 0) + 1
-            self.role_spent[ruolo] = self.role_spent.get(ruolo, 0) + price
-            logger.info(f"Acquistato {nome} ({ruolo}) a {price} cr. Budget rimasto: {self.remaining_budget} cr.")
+        self.sold_players[nome] = {'buyer': buyer_key, 'price': price, 'ruolo': ruolo}
+        
+        t = self.teams[buyer_key]
+        t['roster'].append({**player_dict, 'prezzo_acquisto': price})
+        t['budget'] -= price
+        t['role_counts'][ruolo] = t['role_counts'].get(ruolo, 0) + 1
+        t['role_spent'][ruolo] = t['role_spent'].get(ruolo, 0) + price
+        
+        logger.info(f"[{buyer_key}] Acquistato {nome} ({ruolo}) a {price} cr. Budget rimasto: {t['budget']} cr.")
 
-    def get_remaining_slots(self, ruolo: str) -> int:
-        return max(0, ROSA_TARGET.get(ruolo, 0) - self.role_counts.get(ruolo, 0))
+    def get_remaining_slots(self, team_name: str, ruolo: str) -> int:
+        counts = self.teams[team_name]['role_counts']
+        return max(0, ROSA_TARGET.get(ruolo, 0) - counts.get(ruolo, 0))
 
-    def get_total_remaining_slots(self) -> int:
-        return sum(self.get_remaining_slots(r) for r in ROSA_TARGET.keys())
+    def get_total_remaining_slots(self, team_name: str) -> int:
+        return sum(self.get_remaining_slots(team_name, r) for r in ROSA_TARGET.keys())
+
+    def get_market_heat(self) -> float:
+        """Calcola l'indicatore di Inflazione (Heat). >1 = Inflazione, <1 = Deflazione."""
+        total_initial = len(self.teams) * self.total_budget
+        total_left = sum(t['budget'] for t in self.teams.values())
+        slots_left = sum(self.get_total_remaining_slots(t_name) for t_name in self.teams)
+        
+        if slots_left == 0:
+            return 1.0
+            
+        avg_budget_per_slot = total_left / slots_left
+        baseline_per_slot = total_initial / (len(self.teams) * 25)
+        
+        return avg_budget_per_slot / baseline_per_slot
 
     def to_json(self) -> str:
         return json.dumps({
             'total_budget': self.total_budget,
-            'remaining_budget': self.remaining_budget,
             'my_team_name': self.my_team_name,
-            'my_roster': self.my_roster,
-            'sold_players': self.sold_players,
-            'role_counts': self.role_counts,
-            'role_spent': self.role_spent
+            'teams': self.teams,
+            'sold_players': self.sold_players
         }, indent=2)
 
     @classmethod
     def from_json(cls, json_str: str):
         data = json.loads(json_str)
-        state = cls(total_budget=data['total_budget'], my_team_name=data['my_team_name'])
-        state.remaining_budget = data['remaining_budget']
-        state.my_roster = data['my_roster']
+        # Compatibilità con vecchia versione
+        if 'teams' not in data:
+            old_opp = ["RIVALE 1", "RIVALE 2", "RIVALE 3", "RIVALE 4", "RIVALE 5", "RIVALE 6", "RIVALE 7"]
+            state = cls(total_budget=data['total_budget'], my_team_name=data.get('my_team_name', 'ME'), opponents=old_opp)
+            state.teams[state.my_team_name]['budget'] = data.get('remaining_budget', data['total_budget'])
+            state.teams[state.my_team_name]['roster'] = data.get('my_roster', [])
+            state.teams[state.my_team_name]['role_counts'] = data.get('role_counts', {'P':0, 'D':0, 'C':0, 'A':0})
+            state.teams[state.my_team_name]['role_spent'] = data.get('role_spent', {'P':0, 'D':0, 'C':0, 'A':0})
+            state.sold_players = data.get('sold_players', {})
+            return state
+            
+        state = cls(total_budget=data['total_budget'], my_team_name=data['my_team_name'], opponents=[])
+        state.teams = data['teams']
         state.sold_players = data['sold_players']
-        state.role_counts = data['role_counts']
-        state.role_spent = data['role_spent']
         return state
 
 
@@ -109,33 +146,30 @@ def calculate_copilot_bids(
     num_partecipanti: int = 8
 ) -> pd.DataFrame:
     """
-    Calcola per ciascun giocatore libero nel listone:
-    1. Value Above Replacement (VAR): marginalità di FM attesa rispetto al replacement level.
-    2. Target Bid Price: prezzo fanta-equo stimato.
-    3. Max Recommended Bid: soffitto d'asta massimo invalicabile per mantenere la sostenibilità.
+    Calcola target e max_bid integrando:
+    - Inflazione globale
+    - Scarsità (se nessun rivale cerca il ruolo, max_bid = 1)
+    - Durability (da presenze)
     """
     df = df_players.copy()
+    my_team = auction_state.my_team_name
 
-    # Rimuoviamo i già venduti
     if auction_state.sold_players:
         df = df[~df['nome'].isin(auction_state.sold_players.keys())].copy()
 
     if 'previsione_ia' not in df.columns:
         df['previsione_ia'] = df.get('fanta_media', 6.0)
 
-    # Calcolo Replacement Level per ruolo
     replacement_levels = {}
     for r in ['P', 'D', 'C', 'A']:
         role_df = df[df['ruolo'] == r]
         if not role_df.empty:
-            # Livello di rimpiazzo: il percentile 40 del pool del ruolo
             replacement_levels[r] = role_df['previsione_ia'].quantile(0.40)
         else:
             replacement_levels[r] = 5.50
 
-    # Budget residuo disponibile
-    rem_budget = auction_state.remaining_budget
-    rem_slots = auction_state.get_total_remaining_slots()
+    rem_budget = auction_state.teams[my_team]['budget']
+    rem_slots = auction_state.get_total_remaining_slots(my_team)
 
     if rem_slots <= 0:
         df['target_bid'] = 0
@@ -143,10 +177,12 @@ def calculate_copilot_bids(
         df['var_score'] = 0.0
         return df
 
-    # Riserva per coperture a 1 credito
-    # Dobbiamo garantire almeno 1 credito per ciascuno slot rimanente dopo questo acquisto
     min_reserve = max(0, rem_slots - 1)
     usable_budget = max(1, rem_budget - min_reserve)
+
+    # Market Heat
+    heat = auction_state.get_market_heat()
+    heat_modifier = max(0.6, min(heat, 1.4))  # Limitiamo l'impatto tra 60% e 140%
 
     target_bids = []
     max_bids = []
@@ -157,46 +193,55 @@ def calculate_copilot_bids(
         fm = row.get('previsione_ia', 6.0)
         costo_listone = float(row.get('costo_iniziale', 1))
         
-        # VAR (Value Above Replacement)
         repl = replacement_levels.get(ruolo, 5.5)
         var = max(0.0, fm - repl)
         var_scores.append(round(var, 2))
 
-        # Se non abbiamo slot in questo ruolo, il Max Bid è 0
-        if auction_state.get_remaining_slots(ruolo) <= 0:
+        my_role_slots = auction_state.get_remaining_slots(my_team, ruolo)
+        if my_role_slots <= 0:
             target_bids.append(0)
             max_bids.append(0)
             continue
 
-        # Quota budget allocata al reparto
-        role_rem_slots = auction_state.get_remaining_slots(ruolo)
+        # Scarcity Check: quanti slot liberi hanno I RIVALI in questo ruolo?
+        rival_slots = sum(auction_state.get_remaining_slots(t, ruolo) for t in auction_state.teams if t != my_team)
         
-        # Target bid proporzionale a costo listone e VAR score
-        target_bid = max(1, int(round(costo_listone * (1.0 + (var * 0.25)))))
+        if rival_slots == 0:
+            # EFFETTO SCARSITA': Nessun rivale ha bisogno di questo ruolo! 
+            target_bids.append(1)
+            max_bids.append(1)
+            continue
 
-        # Soffitto massimo (Max Bid) modulato sui partecipanti
-        role_allocs = get_role_allocation(num_partecipanti)
-        if ruolo == 'A':
-            max_cap_pct = role_allocs['A'] + 0.08 if role_rem_slots == ROSA_TARGET.get('A', 6) else role_allocs['A'] - 0.05
-        elif ruolo == 'C':
-            max_cap_pct = role_allocs['C'] + 0.03 if role_rem_slots >= 6 else role_allocs['C'] - 0.07
-        elif ruolo == 'D':
-            max_cap_pct = role_allocs['D'] + 0.05 if role_rem_slots >= 6 else role_allocs['D'] - 0.02
-        else: # P
-            max_cap_pct = role_allocs['P'] + 0.05
+        target_bid = max(1, int(round(costo_listone * (1.0 + (var * 0.25)) * heat_modifier)))
+
+        role_allocs = get_role_allocation(len(auction_state.teams))
+        
+        # Calcolo budget dinamico del ruolo per evitare di prendere 2 Top player nello stesso ruolo
+        my_spent_total = sum(auction_state.teams[my_team]['role_spent'].values())
+        my_initial_budget = rem_budget + my_spent_total
+        role_ideal_budget = my_initial_budget * role_allocs[ruolo]
+        role_already_spent = auction_state.teams[my_team]['role_spent'].get(ruolo, 0)
+        
+        # Budget rimanente ideale per questo ruolo
+        role_rem_budget = role_ideal_budget - role_already_spent
+        
+        if role_rem_budget <= 0:
+            # Hai già sfondato o saturato il budget per questo ruolo (es. preso un Top Portiere a 30)
+            # Copilot bloccherà target alti, lasciando al massimo l'1.5% del budget (per gli scarti a 1 cr)
+            max_cap_pct = 0.015
+        else:
+            # Trasformiamo il budget ideale rimanente in percentuale sul budget usabile attuale
+            # Aggiungiamo un buffer di flessibilità (+5%) per le aste combattute
+            max_cap_pct = min(1.0, (role_rem_budget / usable_budget) + 0.05)
 
         max_bid = min(usable_budget, max(1, int(round(target_bid * 1.35))))
         max_bid = min(max_bid, max(1, int(usable_budget * max_cap_pct)))
 
-        # ── Applicazione Indice di Integrità Fisica ──
-        nome_lower = str(row.get('nome', '')).lower().strip()
-        durability_factor = 1.0
-        for fragile_name, factor in INJURY_PRONE_PLAYERS.items():
-            if fragile_name in nome_lower:
-                durability_factor = factor
-                break
-        
-        if durability_factor < 1.0:
+        # Durability Dinamica: penalizza se presenze sono basse (< 20 su storici di 38)
+        # Se 'presenze' non c'è, assumed 30.
+        presenze = float(row.get('presenze', 30.0))
+        if presenze < 20.0 and 'presenze' in row:
+            durability_factor = max(0.4, presenze / 38.0)
             target_bid = max(1, int(round(target_bid * durability_factor)))
             max_bid = max(1, int(round(max_bid * durability_factor)))
 
@@ -207,6 +252,12 @@ def calculate_copilot_bids(
     df['target_bid'] = target_bids
     df['max_bid'] = max_bids
 
-    # Ordina per valore decrescente
+    # Mantieni il CUI se esiste
+    if 'cui' not in df.columns:
+        df['cui'] = 0.0
+    if 'cui_label' not in df.columns:
+        df['cui_label'] = ''
+
     df = df.sort_values(by=['max_bid', 'previsione_ia'], ascending=[False, False])
     return df
+

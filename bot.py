@@ -482,14 +482,26 @@ async def cmd_news(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def cmd_aggiorna(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if not _auth(update):
         return
-    msg = await update.message.reply_text("🔄 Download stats FBref in corso (30-60 sec)...")
+    msg = await update.message.reply_text("🔄 Download stats e trasferimenti in corso (30-60 sec)...")
     try:
         from scraper_stats import fetch_and_save_stats
-        ok = fetch_and_save_stats()
-        if ok:
-            await msg.edit_text("✅ Stats Serie A aggiornate da FBref!")
+        from scraper_transfermarkt import fetch_and_save_transfers
+        
+        ok_stats = fetch_and_save_stats()
+        ok_tm, tm_msg = fetch_and_save_transfers(2026)
+        
+        reply = []
+        if ok_stats:
+            reply.append("✅ Stats Serie A aggiornate da FBref!")
         else:
-            await msg.edit_text("⚠️ FBref non raggiungibile. Uso dati in cache.")
+            reply.append("⚠️ FBref non raggiungibile. Uso dati in cache.")
+            
+        if ok_tm:
+            reply.append("✅ Trasferimenti aggiornati!")
+        else:
+            reply.append(f"⚠️ Trasferimenti: {tm_msg}")
+            
+        await msg.edit_text("\n".join(reply))
     except Exception as e:
         logger.error(f"cmd_aggiorna error: {e}")
         await msg.edit_text(f"❌ Errore: {e}")

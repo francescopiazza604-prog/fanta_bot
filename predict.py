@@ -547,6 +547,11 @@ def train_prediction_model(
         (circolare, ma utile prima che il modello temporale esista).
     """
     df = pd.read_csv(data_path)
+    
+    # Salva le stats "reali" caricate dall'utente prima che gli scraper le sovrascrivano.
+    # Questo è FONDAMENTALE se il campionato è già iniziato (es. prime 3 giornate).
+    original_fm = df['fanta_media'].copy() if 'fanta_media' in df.columns else None
+    original_pv = df['presenze'].copy() if 'presenze' in df.columns else None
 
     # Fantacalcio.it: solo per la stagione corrente (non ha dati storici per stagione)
     if stats_season == "current":
@@ -631,22 +636,42 @@ def train_prediction_model(
     except Exception as e:
         logger.warning(f"Set pieces boost non applicato: {e}")
 
-    df = _apply_strategy(df, strategy)
+    # ── BLENDING FORMA INIZIO CAMPIONATO (Se a Campionato Iniziato) ─────────────
+    # Se l'utente ha caricato le "Statistiche" con voti veri delle prime N giornate
+    # incrociamo la pre-season prediction con la forma reale attuale.
+    if original_fm is not None and original_pv is not None:
+        mask_played = original_pv > 0
+        if mask_played.sum() > 30 and original_fm.std() > 0.5:
+            logger.info(f"⚽ Campionato iniziato rilevato ({mask_played.sum()} giocatori a voto). Applico blending forma attuale.")
+            
+            # Peso della forma reale rispetto all'IA basato sulle partite giocate.
+            # Es. 1 partita = 15% forma, 85% IA. 3 partite = 45% forma, 55% IA.
+            alpha = (original_pv * 0.15).clip(0.0, 0.60) 
+            
+            df.loc[mask_played, 'previsione_ia'] = (
+                (1.0 - alpha[mask_played]) * df.loc[mask_played, 'previsione_ia'] +
+                alpha[mask_played] * original_fm[mask_played]
+            ).round(3)
+            
+            # Penalizza leggermente (es. -0.25) i giocatori teoricamente titolari che non hanno giocato
+            mask_benched = (original_pv == 0) & (df.get('titolarita_pct', 1.0) > 0.6)
+            df.loc[mask_benched, 'previsione_ia'] = (df.loc[mask_benched, 'previsione_ia'] - 0.25).clip(lower=3.0)
 
+    # ── STRATEGIA, CALENDARIO E NEWS ───────────────────────────────────────────
+    df = _apply_strategy(df, strategy)
     try:
         from scraper_injuries import apply_injury_modifiers
         df = apply_injury_modifiers(df)
     except Exception:
         pass
 
-    # Applicazione automatica delle notizie in cache
     try:
-        auto_news_path = os.path.join(DATA_DIR, "automated_news.txt")
-        if os.path.exists(auto_news_path):
-            with open(auto_news_path, encoding="utf-8") as f:
-                news_txt = f.read().strip()
-            if news_txt:
-                from news_agent import apply_news_modifiers
+        news_file = os.path.join(os.path.dirname(data_path), "news_latest.txt")
+        if os.path.exists(news_file):
+            with open(news_file, "r", encoding="utf-8") as f:
+                news_txt = f.read()
+            if news_txt.strip():
+                from patch_app import apply_news_modifiers
                 df = apply_news_modifiers(df, news_txt)
                 logger.info("✓ Notizie automatiche applicate con successo.")
     except Exception as e:
@@ -667,7 +692,6 @@ def train_prediction_model(
         df.loc[mask_zero, 'fanta_media'] = df.loc[mask_zero, 'previsione_ia']
 
     return df
-
 
 # ── Spiegazione per giocatore ─────────────────────────────────────────────────
 
